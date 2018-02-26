@@ -228,7 +228,7 @@ app.on('ready',()=>{
 	// ウィンドウ生成
 	settingWindow(localdocument.setting);
 	createBackground(localdocument.background);
-	// createWindow(makeURL(localdocument.toolpad));
+	createWindow(makeURL(localdocument.login));
 	// createWindow(makeURL(`file://${__dirname}/private/classrooms/index.html`,moroz));
 
 
