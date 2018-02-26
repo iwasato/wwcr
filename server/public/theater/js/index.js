@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 55);
+/******/ 	return __webpack_require__(__webpack_require__.s = 62);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -4518,7 +4518,6 @@ class Room extends mediasoupClient.Room {
 	}
 
 	joinRoom(){
-		console.log(this.socket.userId);
 		return new Promise((resolve)=>{
 			super.join(this.socket.userId,{device: mediasoupClient.getDeviceInfo(), userId: this.socket.userId, userName: this.socket.userName, rank: this.socket.rank})
 			.then((peers)=>{
@@ -14017,7 +14016,14 @@ exports.default = Consumer;
 /* 52 */,
 /* 53 */,
 /* 54 */,
-/* 55 */
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14037,26 +14043,13 @@ const appman = window.appman;
 const Bridge = window.Bridge;
 const size = remote.screen.getPrimaryDisplay().size;
 const mouseevent = window.mouseevent;
-
-const buttonPack = {
-}
-
-const inputPack = {
-}
-
-const elementPack = {
-}
-
-var componentPack = {
-}
-
+const initConfig = window.initConfig;
 
 /* その他 */
 var socket = null;
 var bridge = null;
 var room = null;
 var windowList = null;
-var background = null;
 var forwardcover = null;
 var ROOMID = decodeURIComponent(location.search.match(/roomid=(.*?)(&|$)/)[1]);
 var ROOMNAME = decodeURIComponent(location.search.match(/roomname=(.*?)(&|$)/)[1]);
@@ -14105,21 +14098,16 @@ window.onload = ()=>{
 			}
 		});
 	});
-
-	/* init element */
-	for(const id in elementPack){
-		elementPack[id] = document.getElementById(id);
-	}
-
-	/* init button */
-	for(const id in buttonPack){
-		buttonPack[id] = document.getElementById(id);
-	}
-
-	/* init input */
-	for(const id in inputPack){
-		inputPack[id] = document.getElementById(id);
-	}
+	bridge.on('as-publicscreen',(e,value)=>{
+		socket.send({
+			action: 'as-publicscreen',
+			option: {
+				roomId: ROOMID,
+				userId: USERID,
+				value: value
+			}
+		})
+	});
 
 	/* init component */
 
@@ -14144,7 +14132,7 @@ window.onload = ()=>{
 				data.value.options.forEach((option)=>{
 					option.type = 'theater';
 					createVirtualWindow(option);
-				});
+				}); 
 			} break;
 			case 'share-app':{
 				data.value.windowNumberList.forEach((windowNumber)=>{
@@ -14158,13 +14146,28 @@ window.onload = ()=>{
 					createVirtualWindow(option);
 				});
 			} break;
+			case 'theater':{
+				data.value.windowNumberList.forEach((windowNumber)=>{
+					const option = {
+						source: data.value.source,
+						userId: data.value.userId,
+						roomId: data.value.roomId,
+						windowNumber: windowNumber,
+						type: 'theater'
+					}
+					createVirtualWindow(option);
+				});
+			} break;
 			case 'vw-mouseevent': {
 				const {mouseEventList,windowNumber} = data.value;
-				mouseEventList.forEach(({x,y,type})=>{
-					mouseeventHandler(type,x,y,windowNumber);
+				mouseEventList.forEach((value)=>{
+					console.log(value.keyCode);
+					if(value.type=='keyinput'){
+						keyeventHandler(value.keyCode);
+					} else {
+						mouseeventHandler(value.type,value.x,value.y,windowNumber);
+					}
 				});
-				// const {point,windowNumber,type} = data.value;
-				// mouseeventHandler(type,point,windowNumber);
 			} break;
 			case 'vw-point': {
 				const {pointEventList,streamId} = data.value;
@@ -14178,25 +14181,11 @@ window.onload = ()=>{
 		windowList = _windowList.filter(isValid);
 	});
 	windowList = appman.getWindows().filter(isValid);
-
-	background = createBackground();
 }
 
 /* 便利関数 */
 
 // create
-const createBackground = ()=>{
-	const _background = new BrowserWindow({
-		width: size.width,
-		height: size.height,
-		type: 'desktop',
-		frame: false,
-		show: true
-	});
-	_background.loadURL(`${localdocument.background}?color=${COLOR}`);
-	_background.openDevTools();
-	return _background;
-}
 const createVirtualWindow = (option)=>{
 	const streamId = `${option.userId}.${option.source}.${option.windowNumber}.${option.roomId}`;
 	const virtualWindow = new BrowserWindow({
@@ -14289,6 +14278,10 @@ const isValid = (win)=>{
 }
 
 // mouseevent
+const keyeventHandler = (keyCode)=>{
+	console.log(keyCode);
+	keyevent.input(keyCode);
+}
 const mouseeventHandler = (type,x,y,windowNumber)=>{
 	switch(type){
 		case 'click':
@@ -14368,7 +14361,8 @@ const initRoom = ()=>{
 			source: 'screen',
 			userId: USERID,
 			userName: USERNAME,
-			roomId: room.id
+			roomId: room.id,
+			aspublicscreen: initConfig['as-publicscreen']
 		});
 		createAllWindowStream()
 		.then(values=>values.map(value=>{
@@ -14382,6 +14376,49 @@ const initRoom = ()=>{
 		}));
 	});
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /***/ })
 /******/ ]);

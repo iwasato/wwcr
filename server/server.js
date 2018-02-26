@@ -259,6 +259,16 @@ const onmessage = (socket,{action,option})=>{
 			send(clients[option.target],'share-app',null,option);
 		} break;
 
+		case 'theater': {
+			option.windowNumberList.forEach(windowNumber=>{
+				console.log('theater app:'.bgYellow+` ${windowNumber}`.magenta+`(${option.userId} -> ${option.target})`);
+				console.log('	room: '.green+`${option.roomId}`.magenta+'\n');
+				const streamId = `${option.userId}.${option.source}.${windowNumber}.${option.roomId}`;
+				vws[option.roomId][streamId].push(option.target);
+			});
+			send(clients[option.target],'theater',null,option);
+		} break;
+
 		case 'socket-init': {
 			console.log('conected:'.bgGreen+` ${option.userId}`.magenta);
 			clients[option.userId] = socket;
@@ -362,12 +372,12 @@ const onjoin = (option)=>{
 			});
 			peer.on('close',()=>{
 				console.log('closed: '.cyan+`${option.userId}`.magenta);
-				console.log('	room: '.cyan+`${option.roomId}`.magenta+'\n');
+				console.log('	room: '.cyan+`${option.roomId}`.magenta);
+				console.log('		leave: '.cyan+`${room.peers.length}`.magenta+'\n');
 				delete clients[option.userId];
-
 				if(room.peers.length == 0){
 					room.close();
-					delete vws[roomId];
+					delete vws[option.roomId];
 					delete rooms[option.roomId];
 					console.log('closed : '.cyan+`${option.roomId}`.magenta);
 				}

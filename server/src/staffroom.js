@@ -1,3 +1,4 @@
+import democontents from './democontents/index.js';
 import popup from './popup/index.js';
 import components from './components/components.jsx';
 import Socket from './socket.js';
@@ -12,6 +13,7 @@ const appman = window.appman;
 const Bridge = window.Bridge;
 const size = remote.screen.getPrimaryDisplay().size;
 const mouseevent = window.mouseevent;
+const keyevent = window.keyevent;
 
 const buttonPack = {
 	'showdisplay-toptool__button': null,
@@ -175,6 +177,56 @@ window.onload = ()=>{
 	}
 
 	buttonPack['theater-toptool__button'].onclick = ()=>{
+		var screen = null;
+		const options = {
+			root: {
+				list: null,
+				subtitle: 'スクリーンを選択'
+			}
+		}
+		options.root.list = componentPack['item-view'].itemList.filter(user=>{
+			return user.aspublicscreen;
+		}).map(user=>{
+			return {
+				label: user.label,
+				iconurl: user.iconurl,
+				value: user.id
+			}
+		});
+		popup.navigation(options,null,'シアター',false)
+		.then(value=>{
+			screen = value;
+			const streamList = [];
+			room.searchStream({
+				query: {
+					userId: USERID,
+					source: 'window'
+				},
+				logic: 'and'
+			}).map((streamId)=>{
+				const number = streamId.split('.')[2];
+				streamList.push({
+					number: number,
+					stream: room.getStream(streamId)
+				});
+				popup.windowList(streamList)
+				.then(winList=>{
+					const windowNumberList = winList.map(win=>{
+						return win.number;
+					});
+					socket.send({
+						action: 'theater',
+						option: {
+							target: screen,
+							source: 'window',
+							userId: USERID,
+							roomId: ROOMID,
+							windowNumberList: windowNumberList
+						}
+					})
+				});
+			});
+		});
 	}
 
 	buttonPack['message-toptool__button'].onclick = ()=>{
@@ -382,10 +434,10 @@ window.onload = ()=>{
 			}
 		}
 		options.root.list = componentPack['item-view'].itemList.filter(user=>{
-			return user.asscreen;
+			return user.aspublicscreen;
 		}).map(user=>{
 			return {
-				label: user.name,
+				label: user.label,
 				iconurl: user.iconurl,
 				value: user.id
 			}
@@ -407,7 +459,21 @@ window.onload = ()=>{
 					stream: room.getStream(streamId)
 				});
 				popup.windowList(streamList)
-				.then(console.log);
+				.then(winList=>{
+					const windowNumberList = winList.map(win=>{
+						return win.number;
+					});
+					socket.send({
+						action: 'theater',
+						option: {
+							target: screen,
+							source: 'window',
+							userId: USERID,
+							roomId: ROOMID,
+							windowNumberList: windowNumberList
+						}
+					})
+				});
 			});
 		});
 	}
@@ -498,10 +564,26 @@ window.onload = ()=>{
 				createVirtualWindow(option);
 			});
 			} break;
+			case 'theater':{
+				data.value.windowNumberList.forEach((windowNumber)=>{
+					const option = {
+						source: data.value.source,
+						userId: data.value.userId,
+						roomId: data.value.roomId,
+						windowNumber: windowNumber,
+						type: 'theater'
+					}
+					createVirtualWindow(option);
+				});
+			} break;
 			case 'vw-mouseevent': {
 				const {mouseEventList,windowNumber} = data.value;
-				mouseEventList.forEach(({x,y,type})=>{
-					mouseeventHandler(type,x,y,windowNumber);
+				mouseEventList.forEach((value)=>{
+					if(value.type=='keyinput'){
+						keyeventHandler(value.keyCode);
+					} else {
+						mouseeventHandler(value.type,value.x,value.y,windowNumber);
+					}
 				});
 			// const {point,windowNumber,type} = data.value;
 			// mouseeventHandler(type,point,windowNumber);
@@ -770,7 +852,8 @@ const userToItem = (user)=>{
 		iconurl: user.iconurl || createIconWithChar(user.name),
 		srcObject: user.stream,
 		checked: false,
-		downercontent: false
+		downercontent: false,
+		aspublicscreen: user.aspublicscreen
 	}
 }
 const groupToGroup = (group)=>{
@@ -801,6 +884,9 @@ const initGroups = (groupList)=>{
 }
 
 // mouseevent
+const keyeventHandler = (keyCode)=>{
+	keyevent.input(keyCode);
+}
 const mouseeventHandler = (type,x,y,windowNumber)=>{
 	switch(type){
 		case 'click':
@@ -872,12 +958,13 @@ const initRoom = ()=>{
 	}
 	room.onnewstream = (stream,appData)=>{
 		if(appData.source == 'screen'){
+			console.log(appData);
 			componentPack['item-view'].addItem(userToItem({
 				name: appData.userName,
 				id: appData.userId,
 				rank: 'student',
 				stream: stream,
-				asscreen: appData.option['as-publicscreen']
+				aspublicscreen: appData.aspublicscreen
 			}));
 			if(componentPack['group-view'].currentGroupId=='all'){
 				componentPack['item-view'].setAllItem();
@@ -895,7 +982,8 @@ const initRoom = ()=>{
 			source: 'screen',
 			userId: USERID,
 			userName: USERNAME,
-			roomId: room.id
+			roomId: room.id,
+			aspublicscreen: initConfig['as-publicscreen']
 		});
 		componentPack['item-view'].addItem(userToItem({
 			name: USERNAME,

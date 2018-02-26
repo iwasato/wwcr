@@ -31,9 +31,9 @@ export default class Room extends mediasoupClient.Room {
 		});
 	}
 
-	joinRoom(option){
+	joinRoom(){
 		return new Promise((resolve)=>{
-			super.join(this.socket.userId,{device: mediasoupClient.getDeviceInfo(), userId: this.socket.userId, userName: this.socket.userName, rank: this.socket.rank, option})
+			super.join(this.socket.userId,{device: mediasoupClient.getDeviceInfo(), userId: this.socket.userId, userName: this.socket.userName, rank: this.socket.rank})
 			.then((peers)=>{
 				this.sendTransport = super.createTransport('send',{media: 'SEND'});
 				this.recvTransport = super.createTransport('recv',{media: 'RECV'});

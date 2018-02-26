@@ -77,21 +77,6 @@ window.onload = ()=>{
 		})
 	});
 
-	/* init element */
-	for(const id in elementPack){
-		elementPack[id] = document.getElementById(id);
-	}
-
-	/* init button */
-	for(const id in buttonPack){
-		buttonPack[id] = document.getElementById(id);
-	}
-
-	/* init input */
-	for(const id in inputPack){
-		inputPack[id] = document.getElementById(id);
-	}
-
 	/* init component */
 
 	socket = new Socket();
@@ -129,10 +114,27 @@ window.onload = ()=>{
 					createVirtualWindow(option);
 				});
 			} break;
+			case 'theater':{
+				data.value.windowNumberList.forEach((windowNumber)=>{
+					const option = {
+						source: data.value.source,
+						userId: data.value.userId,
+						roomId: data.value.roomId,
+						windowNumber: windowNumber,
+						type: 'theater'
+					}
+					createVirtualWindow(option);
+				});
+			} break;
 			case 'vw-mouseevent': {
 				const {mouseEventList,windowNumber} = data.value;
-				mouseEventList.forEach(({x,y,type})=>{
-					mouseeventHandler(type,x,y,windowNumber);
+				mouseEventList.forEach((value)=>{
+					console.log(value.keyCode);
+					if(value.type=='keyinput'){
+						keyeventHandler(value.keyCode);
+					} else {
+						mouseeventHandler(value.type,value.x,value.y,windowNumber);
+					}
 				});
 			} break;
 			case 'vw-point': {
@@ -244,6 +246,10 @@ const isValid = (win)=>{
 }
 
 // mouseevent
+const keyeventHandler = (keyCode)=>{
+	console.log(keyCode);
+	keyevent.input(keyCode);
+}
 const mouseeventHandler = (type,x,y,windowNumber)=>{
 	switch(type){
 		case 'click':
@@ -315,7 +321,7 @@ const initRoom = ()=>{
 	}
 	room.onnewstream = (stream,appData)=>{
 	}
-	room.joinRoom({'as-publicscreen': initConfig['as-publicscreen']})
+	room.joinRoom()
 	.then(()=>{
 		return createScreenStream();
 	}).then((stream)=>{
@@ -323,7 +329,8 @@ const initRoom = ()=>{
 			source: 'screen',
 			userId: USERID,
 			userName: USERNAME,
-			roomId: room.id
+			roomId: room.id,
+			aspublicscreen: initConfig['as-publicscreen']
 		});
 		createAllWindowStream()
 		.then(values=>values.map(value=>{
