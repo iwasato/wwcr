@@ -23,6 +23,12 @@ module.exports = (()=>{
 		execSync(`${__dirname}/lib/click ${x} ${y}`);
 		execSync(`${__dirname}/lib/doubleclick ${x} ${y}`);
 	}
+	funcs.mousedown = (x,y)=>{
+		execSync(`${__dirname}/lib/mousedown ${x} ${y}`);
+	}
+	funcs.mouseup = (x,y)=>{
+		execSync(`${__dirname}/lib/mouseup ${x} ${y}`);
+	}
 
 	return funcs
 })();
