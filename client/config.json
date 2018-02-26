@@ -5,5 +5,5 @@
 	},
 	"server-address": "http://localhost:3001",
 	"as-publicscreen": false,
-	"edit-background": "black"
+	"edit-background": null
 }

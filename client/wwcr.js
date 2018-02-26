@@ -210,6 +210,7 @@ app.on('ready',()=>{
 	bridge.on('theater',(e,value)=>{
 		window.loadURL(makeURL(localdocument.theater,value));
 		window.setOpacity(0);
+		window.setIgnoreMouseEvents(true);
 	});
 
 	tray = new Tray(`${__dirname}/img/tray.png`);
