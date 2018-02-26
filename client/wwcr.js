@@ -141,7 +141,8 @@ app.on('ready',()=>{
 	global.localmodules = {
 		appman: `${__dirname}/modules/appman`,
 		bridge: `${__dirname}/modules/bridge`,
-		mouseevent: `${__dirname}/modules/mouseevent`
+		mouseevent: `${__dirname}/modules/mouseevent`,
+		keyevent: `${__dirname}/modules/keyevent`
 	}
 	global.pid = process.pid;
 	global.config = config;
