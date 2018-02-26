@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<!-- mdl -->
+	<link rel="stylesheet" href="../_common_/mdl/icon.css">
+	<link rel="stylesheet" href="../_common_/mdl/material.min.css">
+	<script defer src="../_common_/mdl/material.min.js"></script>
+	<!-- sweetalert2 -->
+	<script type="text/javascript" src="../_common_/sweetalert2/sweetalert2.min.js"></script>
+	<link rel="stylesheet" href="../_common_/sweetalert2/sweetalert2.min.css">
+	<!-- index -->
+	<script type="text/javascript" src="./js/index.js"></script>
+	<link rel="stylesheet" type="text/css" href="./css/index.css">
+	<title>Mados</title>
+</head>
+<body>
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
+	    mdl-layout--fixed-tabs">
+		<header class="mdl-layout__header">
+			<div class="mdl-color-text--black mdl-color--grey-200 mdl-layout__header-row">
+				<!-- Title -->
+				<span class="mdl-layout-title">ツールパッド</span>
+			</div>
+			<div id="segment_buttons" class="mdl-color--grey-200 mdl-grid">
+				<input type="radio" name="segment_button___display" id="pointer-tool__input" class="segment_buttons__display" checked/><label for="pointer-tool__input" class="segment_button_labels"><i class="material-icons">brightness_1</i></label>
+				<input type="radio" name="segment_button___display" id="memo-tool__input" class="segment_buttons__display"/><label for="memo-tool__input" class="segment_button_labels"><i class="material-icons">mode_edit</i></label>
+			</div>
+		</header>
+		<main class="mdl-layout__content">
+			<div class="toptool-bar">
+				<div class="size">
+					<span>サイズ</span>
+					<input id="small" type="radio" name="size" class="size-input">
+					<label for="small" class="size-box"><i class="material-icons">stop</i></label>
+					<input id="midium" type="radio" name="size" class="size-input" checked>
+					<label for="midium" class="size-box"><i class="material-icons">stop</i></label>
+					<input id="large" type="radio" name="size" class="size-input">
+					<label for="large" class="size-box"><i class="material-icons">stop</i></label>
+				</div>
+				<div class="color">
+					<span>色</span>
+					<input id="red" type="radio" name="color" class="color-input">
+					<label for="red" class="color-box"></label>
+					<input id="blue" type="radio" name="color" class="color-input" checked>
+					<label for="blue" class="color-box"></label>
+					<input id="green" type="radio" name="color" class="color-input">
+					<label for="green" class="color-box"></label>
+				</div>
+			</div>
+			<div class="toolpad"></div>
+		</main>
+	</div>
+</body>
+</html>

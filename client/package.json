@@ -1,0 +1,21 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "mados app",
+  "main": "wwcr.js",
+  "scripts": {
+    "start": "npm test",
+    "test": "./node_modules/.bin/electron .",
+    "classrooms": "./node_modules/.bin/jsx -x jsx ./private/classrooms/js/src ./private/classrooms/js --watch"
+  },
+  "keywords": [
+    "electron"
+  ],
+  "author": "iwasato",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "electron": "^1.7.10",
+    "react-tools": "^0.13.3"
+  }
+}

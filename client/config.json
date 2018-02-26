@@ -1,0 +1,7 @@
+{
+	"auto-enter-classroom": {
+		"classroom-id": "",
+		"value": false
+	},
+	"server-address": "https://mugi.iwasato.tk:3000"
+}
