@@ -1,6 +1,6 @@
 export default class EasySocket extends WebSocket {
 	constructor(url){
-		super(url || "wss://"+location.hostname+":"+location.port);
+		super(url || `${location.protocol=='https'?'wss':'ws'}://${location.host}`);
 		
 		this.messageHandler = {}
 		this.addEventListener('message',(e)=>{

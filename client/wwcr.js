@@ -101,8 +101,9 @@ const moroz = {
 app.on('ready',()=>{
 	/* global var */
 	global.localmodules = {
-		appman: path.join(__dirname,'modules','appman'),
-		bridge: path.join(__dirname,'modules','bridge')
+		appman: `${__dirname}/modules/appman`,
+		bridge: `${__dirname}/modules/bridge`,
+		mouseevent: `${__dirname}/modules/mouseevent`
 	}
 	global.pid = process.pid;
 	global.config = config;
@@ -173,7 +174,7 @@ app.on('ready',()=>{
 	// createWindow(makeURL(`file://${__dirname}/private/classrooms/index.html`,moroz));
 
 
-	// createWindow('https://str-tennis.iwasato.tk:3000/theater?rank=student&roomid=demo&roomname=テスト５&userid=moroz&username=両角 貴弘');
+	// createWindow('http://localhost:3001/theater?rank=student&roomid=demo&roomname=テスト５&userid=moroz&username=両角 貴弘');
 	// window.setSize(size.width,size.height);
 	// window.setOpacity(0);
 	// window.setIgnoreMouseEvents(true);

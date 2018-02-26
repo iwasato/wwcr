@@ -3,5 +3,5 @@
 		"classroom-id": "",
 		"value": false
 	},
-	"server-address": "https://mugi.iwasato.tk:3000"
+	"server-address": "http://localhost:3001"
 }

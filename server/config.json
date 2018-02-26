@@ -5,6 +5,6 @@
 	},
 	"port": {
 		"https": 3000,
-		"websocket": 3001
+		"http": 3001
 	}
 }

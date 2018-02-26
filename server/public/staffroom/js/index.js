@@ -4410,7 +4410,7 @@ exports.default = RemoteUnifiedPlanSdp;
 "use strict";
 class EasySocket extends WebSocket {
 	constructor(url){
-		super(url || "wss://"+location.hostname+":"+location.port);
+		super(url || `${location.protocol=='https'?'wss':'ws'}://${location.host}`);
 		
 		this.messageHandler = {}
 		this.addEventListener('message',(e)=>{
@@ -14341,13 +14341,8 @@ window.onload = ()=>{
 			});
 			__WEBPACK_IMPORTED_MODULE_0__popup_index_js__["a" /* default */].windowList(streamList)
 			.then(valueList=>{
-				const options = valueList.map(value=>{
-					return {
-						source: 'window',
-						userId: tmpFocusItemId,
-						roomId: ROOMID,
-						windowNumber: value.number
-					};
+				const windowNumberList = valueList.map(value=>{
+					return value.number;
 				});
 				const targetUserList = componentPack['item-view'].currentItemIdList;
 				targetUserList.forEach(target=>{
@@ -14355,7 +14350,10 @@ window.onload = ()=>{
 						action: 'share-app',
 						option: {
 							target: target,
-							options: options
+							source: 'window',
+							userId: tmpFocusItemId,
+							roomId: ROOMID,
+							windowNumberList: windowNumberList
 						}
 					})
 				});
@@ -14470,18 +14468,24 @@ window.onload = ()=>{
 	socket.onmessage = (e)=>{
 		const data = JSON.parse(e.data);
 		switch(data.action){
-			case 'add-vw':
+			case 'add-vw':{
 			data.value.options.forEach((option)=>{
 				option.type = 'theater';
 				createVirtualWindow(option);
 			});
-			break;
-			case 'share-app':
-			data.value.options.forEach((option)=>{
-				option.type = 'share';
+			}break;
+			case 'share-app':{
+			data.value.windowNumberList.forEach((windowNumber)=>{
+				const option = {
+					source: data.value.source,
+					userId: data.value.userId,
+					roomId: data.value.roomId,
+					windowNumber: windowNumber,
+					type: 'share'
+				}
 				createVirtualWindow(option);
 			});
-			break;
+			} break;
 			case 'vw-mousedown':{
 			const {point,windowNumber,type} = data.value;
 			mouseeventHandler(type,point,windowNumber);
@@ -14636,7 +14640,7 @@ const createVirtualWindow = (option)=>{
 		width: 500,
 		height: 500
 	});
-	virtualWindow.loadURL(`https://${location.hostname}:${location.port}/vw?streamId=${option.userId}.${option.source}.${option.windowNumber}.${option.roomId}&type=${option.type}`);
+	virtualWindow.loadURL(`${location.protocol}://${location.host}/vw?streamId=${option.userId}.${option.source}.${option.windowNumber}.${option.roomId}&type=${option.type}`);
 	virtualWindow.openDevTools();
 }
 const createContextMenu = (e)=>{

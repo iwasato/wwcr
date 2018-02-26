@@ -6,6 +6,7 @@
 const path = require('path');
 const os = require('os');
 const https = require('https');
+const http = require('http');
 const fs = require('fs');
 
 /* import third-party modules */
@@ -87,16 +88,22 @@ router.get('/icon',(req,res)=>{
 	res.sendFile(path.join(__dirname,'public','icon',req.query.type,`${req.query.id}.png`));
 });
 
-const exapp = express();
-exapp.use(express.static(path.join(__dirname,'public')));
-exapp.use('/',router);
-exapp.set('port',config.port.https);
+const https_exapp = express();
+https_exapp.use(express.static(path.join(__dirname,'public')));
+https_exapp.use('/',router);
+https_exapp.set('port',config.port.https);
+
+const http_exapp = express();
+http_exapp.use(express.static(path.join(__dirname,'public')));
+http_exapp.use('/',router);
+http_exapp.set('port',config.port.http);
 
 /* https server */
 const httpsServer = https.createServer({
 	key: fs.readFileSync(keyfile),
 	cert: fs.readFileSync(certfile)
-},exapp);
+},https_exapp);
+const httpServer = http.createServer(http_exapp);
 
 /* database */
 const usersDB = new sqlite3.Database('./db/users.sqlite3');
@@ -163,6 +170,9 @@ const createClassroom = (name,token,ownerid,color,ownername)=>{
 const wssServer = new ws.Server({
 	server: httpsServer
 });
+const wsServer = new ws.Server({
+	server: httpServer
+});
 
 const rtcServer = mediasoup.Server({
 	dtlsPrivateKeyFile: keyfile,
@@ -171,7 +181,9 @@ const rtcServer = mediasoup.Server({
 
 var clients = {};
 var rooms = {};
-wssServer.on('connection',(socket)=>{
+var vws = {};
+
+const onconnection = (socket)=>{
 	socket.on('message',(message)=>{
 		const {handlerId,body,sync,returnSync,value} = JSON.parse(message);
 		if(returnSync){
@@ -193,8 +205,11 @@ wssServer.on('connection',(socket)=>{
 	});
 
 	socket.on('error',()=>{
-	})
-});
+	});
+}
+
+wssServer.on('connection',onconnection);
+wsServer.on('connection',onconnection);
 
 const send = (socket,action,handlerId,value,returnSync=false)=>{
 	socket.send(JSON.stringify({
@@ -207,34 +222,47 @@ const send = (socket,action,handlerId,value,returnSync=false)=>{
 
 const onmessage = (socket,{action,option})=>{
 	switch(action){
-		case 'mediasoup_request':
-		return onmediasouprequest(option);
-		break;
+		case 'mediasoup_request': {
+			return onmediasouprequest(option);
+		} break;
 
-		case 'mediasoup_notify':
-		onmediasoupnotify(option);
-		break;
+		case 'mediasoup_notify': {
+			onmediasoupnotify(option);
+		} break;
 
-		case 'share-app':
-		console.log('share-app');
-		send(clients[option.target],'share-app',null,option);
-		break;
+		case 'share-app': {
+			option.windowNumberList.forEach(windowNumber=>{
+				const streamId = `${option.userId}.${option.source}.${windowNumber}.${option.roomId}`;
+				vws[option.roomId][streamId].push(option.target);
+			});
+			send(clients[option.target],'share-app',null,option);
+		} break;
 
-		case 'socket-init':
-		console.log('conected: '.green+`${option.userId}`.magenta);
-		clients[option.userId] = socket;
-		return true;
-		break;
+		case 'socket-init': {
+			console.log('conected: '.green+`${option.userId}`.magenta);
+			clients[option.userId] = socket;
+			return true;
+		} break;
 
-		case 'vw-mouseevent':
-		send(clients[option.target],'vw-mouseevent',null,option);
-		break;
+		case 'vw-mouseevent': {
+			send(clients[option.target],'vw-mouseevent',null,option);
+		} break;
+
+		case 'vw-pointer': {
+
+		} break;
+
+		case 'vw-close': {
+			const streamId = option.streamId;
+			const index = vws[option.roomId][streamId].indexOf(option.userId);
+			if(index!=-1){
+				vws[option.roomId][streamId].splice(index,1);
+			}
+		} break;
 	}
 }
 
 const onmediasouprequest = (option)=>{
-	console.log('from: '.blue+`${option.userId}`.magenta);
-	console.log('	action: '.blue+`${option.request.method}`.magenta+'\n');
 	switch(option.request.method){
 		case 'queryRoom':
 		return onqueryroom(option);
@@ -255,6 +283,8 @@ const onmediasoupnotify = (option)=>{
 	peer.receiveNotification(option.notification);
 }
 const onqueryroom = (option)=>{
+	console.log('from: '.blue+`${option.userId}`.magenta);
+	console.log('	action: '.blue+`${option.request.method}`.magenta+'\n');
 	return new Promise((resolve)=>{
 		const room = rooms[option.roomId] || createRoom(option.roomId);
 		room.receiveRequest(option.request)
@@ -268,6 +298,8 @@ const onqueryroom = (option)=>{
 	});
 }
 const onjoin = (option)=>{
+	console.log('from: '.blue+`${option.userId}`.magenta);
+	console.log('	action: '.blue+`${option.request.method}`.magenta+'\n');
 	return new Promise((resolve)=>{
 		const room = rooms[option.roomId];
 		room.receiveRequest(option.request)
@@ -291,9 +323,16 @@ const onjoin = (option)=>{
 
 				if(room.peers.length == 0){
 					room.close();
+					delete vws[roomId];
 					delete rooms[option.roomId];
 					console.log('closed : '.cyan+`${option.roomId}`.magenta);
 				}
+			});
+			peer.on('newproducer',({appData})=>{
+				console.log('add stream: '.yellow+`${appData.userId}(${appData.windowNumber})`.magenta+'');
+				console.log('	room: '.green+`${appData.roomId}`.magenta+'\n');
+				const streamId = `${appData.userId}.${appData.source}.${appData.windowNumber}.${appData.roomId}`;
+				vws[appData.roomId][streamId] = [];
 			});
 		}).catch((err)=>{
 			console.log('不明なエラー: join'.red);
@@ -339,8 +378,10 @@ const createRoom = (id)=>{
 	]);
 
 	rooms[id] = newRoom;
+	vws[id] = {};
 	return newRoom;
 }
 
 /* start */
 httpsServer.listen(config.port.https);
+httpServer.listen(config.port.http);
