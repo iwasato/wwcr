@@ -31,10 +31,9 @@ export default class Room extends mediasoupClient.Room {
 		});
 	}
 
-	joinRoom(){
-		console.log(this.socket.userId);
+	joinRoom(option){
 		return new Promise((resolve)=>{
-			super.join(this.socket.userId,{device: mediasoupClient.getDeviceInfo(), userId: this.socket.userId, userName: this.socket.userName, rank: this.socket.rank})
+			super.join(this.socket.userId,{device: mediasoupClient.getDeviceInfo(), userId: this.socket.userId, userName: this.socket.userName, rank: this.socket.rank, option})
 			.then((peers)=>{
 				this.sendTransport = super.createTransport('send',{media: 'SEND'});
 				this.recvTransport = super.createTransport('recv',{media: 'RECV'});
@@ -116,11 +115,15 @@ export default class Room extends mediasoupClient.Room {
 	}
 
 	onnewpeer(peer){}
+	onclosepeer(peer){}
 	onnewstream(stream,appData){}
 
 	_onnewpeer(peer){
 		peer.on('newconsumer',(consumer)=>{
 			this._onnewconsumer(consumer);
+		});
+		peer.on('close',()=>{
+			this.onclosepeer(peer);
 		});
 		peer.consumers.forEach((consumer)=>{
 			this._onnewconsumer(consumer);

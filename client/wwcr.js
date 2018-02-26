@@ -22,9 +22,47 @@ const {app,BrowserWindow,Tray,Menu,MenuItem,net} = electron;
 /* その他 */
 var config = require('./config.json');
 var window = null;
+var setting = null;
+var background = null;
 var size = null;
+var tray = null;
+var forceCloseFlg = false;
 
 /* 便利関数 */
+const createBackground = (url)=>{
+	background = new BrowserWindow({
+		width: size.width,
+		height: size.height,
+		type: 'desktop',
+		frame: false,
+		show: true
+	});
+	background.loadURL(url);
+	background.on('closed',(e)=>{
+		background = null;
+	});
+}
+const settingWindow = (url)=>{
+	setting = new BrowserWindow({
+		center: true,
+		width: 400,
+		height: 500,
+		resizable: true,
+		useContentSize: true,
+		titleBarStyle: 'hidden',
+		show: false
+	});
+	setting.on('close',(e)=>{
+		if(!forceCloseFlg){
+			e.preventDefault();
+			setting.hide();
+		}
+	});
+	setting.on('closed',(e)=>{
+		setting = null;
+	});
+	setting.loadURL(decodeURIComponent(url));
+}
 const createWindow = (url)=>{
 	window = new BrowserWindow({
 		center: true,
@@ -118,7 +156,8 @@ app.on('ready',()=>{
 		},
 		get theater(){
 			return `${config['server-address']}/theater`;
-		}
+		},
+		setting: `file://${__dirname}/private/setting/index.html`
 	}
 
 	size = electron.screen.getPrimaryDisplay().size;
@@ -126,8 +165,13 @@ app.on('ready',()=>{
 	// bridge
 	bridge = new Bridge(electron);
 	bridge.on('config-update',(e,newconfig)=>{
-		config = newconfig;
-		fs.writeFileSync(`${__dirname}/config.json`,JSON.stringify(newconfig,null,'\t'));
+		for(const key in newconfig){
+			config[key] = newconfig[key];
+		}
+		fs.writeFileSync(`${__dirname}/config.json`,JSON.stringify(config,null,'\t'));
+	});
+	bridge.on('change-background',(e,option)=>{
+		bridge.send('background','change',option);
 	});
 	bridge.on('login',(e,value)=>{
 		value.process = 'login';
@@ -168,8 +212,22 @@ app.on('ready',()=>{
 		window.setOpacity(0);
 	});
 
+	tray = new Tray(`${__dirname}/img/tray.png`);
+	const menu = new Menu();
+	const item = new MenuItem({
+		label: '設定画面',
+		click: ()=>{
+			if(setting){
+				setting.show();
+			}
+		}
+	});
+	menu.append(item);
+	tray.setContextMenu(menu);
+
 	// ウィンドウ生成
-	createWindow(makeURL(localdocument.login));
+	settingWindow(localdocument.setting);
+	createBackground(localdocument.background);
 	// createWindow(makeURL(localdocument.toolpad));
 	// createWindow(makeURL(`file://${__dirname}/private/classrooms/index.html`,moroz));
 
@@ -185,6 +243,9 @@ app.on('ready',()=>{
 app.on('certificate-error',(event,webContents,url,error,certificate,callback)=>{
 	event.preventDefault();
 	callback(true);
+});
+app.on('before-quit',(e)=>{
+	forceCloseFlg = true;
 });
 app.on('closed',(e)=>{
 });

@@ -140,6 +140,25 @@ const getClassrooms = (ownerId)=>{
 		});
 	});
 }
+const getClassroomOwner = (roomId)=>{
+	return new Promise((resolve,reject)=>{
+		usersDB.serialize(()=>{
+			usersDB.each(`select * from rooms where id='${id}'`,(err,res)=>{
+				resolve({
+					id: res.ownerid
+				});
+			},(err,count)=>{
+				if(err){
+					reject(err);
+				} else {
+					if(count != 1){
+						reject();
+					}
+				}
+			});
+		});
+	});
+}
 const createClassroom = (name,token,ownerid,color,ownername)=>{
 	const id = createId();
 	const date = new Date();
@@ -232,6 +251,8 @@ const onmessage = (socket,{action,option})=>{
 
 		case 'share-app': {
 			option.windowNumberList.forEach(windowNumber=>{
+				console.log('share app:'.bgYellow+` ${windowNumber}`.magenta+`(${option.userId} -> ${option.target})`);
+				console.log('	room: '.green+`${option.roomId}`.magenta+'\n');
 				const streamId = `${option.userId}.${option.source}.${windowNumber}.${option.roomId}`;
 				vws[option.roomId][streamId].push(option.target);
 			});
@@ -239,25 +260,48 @@ const onmessage = (socket,{action,option})=>{
 		} break;
 
 		case 'socket-init': {
-			console.log('conected: '.green+`${option.userId}`.magenta);
+			console.log('conected:'.bgGreen+` ${option.userId}`.magenta);
 			clients[option.userId] = socket;
 			return true;
 		} break;
 
 		case 'vw-mouseevent': {
+			console.log(`mouseevent vw:`.bgYellow+` ${option.windowNumber}`.magenta+`( -> ${option.target})`);
+			console.log('	room: '.green+`${option.roomId}`.magenta+'\n');
 			send(clients[option.target],'vw-mouseevent',null,option);
 		} break;
 
-		case 'vw-pointer': {
-
+		case 'vw-point': {
+			console.log(`point vw:`.bgYellow+` ${option.windowNumber}`.magenta+`( -> ${option.target})`);
+			console.log('	room: '.green+`${option.roomId}`.magenta+'\n');
+			vws[option.roomId][option.streamId].forEach(userId=>{
+				send(clients[userId],'vw-point',null,option);
+			});
 		} break;
 
 		case 'vw-close': {
+			console.log('close vw:'.bgYellow+` ${option.windowNumber}`.magenta+`(${option.ownerId} -> ${option.userId})`);
+			console.log('	room: '.green+`${option.roomId}`.magenta+'\n');
 			const streamId = option.streamId;
 			const index = vws[option.roomId][streamId].indexOf(option.userId);
 			if(index!=-1){
 				vws[option.roomId][streamId].splice(index,1);
 			}
+		} break;
+
+		case 'as-publicscreen': {
+			console.log(`as publicscreen:`.bgYellow+` ${option.userId}`.magenta);
+			console.log('	room: '.green+`${option.roomId}`.magenta+'\n');
+			getClassroomOwner(option.roomId)
+			.then(result=>{
+				const socket = clients[result.id];
+				if(!socket){
+					return;
+				}
+				send(socket,'as-publicscreen',null,option);
+			}).catch(()=>{
+				console.log('error');
+			});
 		} break;
 	}
 }

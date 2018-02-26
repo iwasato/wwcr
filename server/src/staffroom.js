@@ -139,17 +139,39 @@ window.onload = ()=>{
 	}
 
 	buttonPack['appsharing-toptool__button'].onclick = ()=>{
-		// createAllWindowStream()
-		// .then(values=>{
-		// 	remote.getCurrentWindow().focus();
-		// 	return popup.windowList(values);
-		// }).then(values=>{
-		// 	console.log(values);
-		// }).catch(err=>{
-		// 	if(err){
-		// 		console.error(err);
-		// 	}
-		// });
+		const streamList = [];
+		room.searchStream({
+			query: {
+				userId: USERID,
+				source: 'window'
+			},
+			logic: 'and'
+		}).map((streamId)=>{
+			const number = streamId.split('.')[2];
+			streamList.push({
+				number: number,
+				stream: room.getStream(streamId)
+			});
+			popup.windowList(streamList)
+			.then(valueList=>{
+				const windowNumberList = valueList.map(value=>{
+					return value.number;
+				});
+				const targetUserList = componentPack['item-view'].currentItemIdList;
+				targetUserList.forEach(target=>{
+					socket.send({
+						action: 'share-app',
+						option: {
+							target: target,
+							source: 'window',
+							userId: USERID,
+							roomId: ROOMID,
+							windowNumberList: windowNumberList
+						}
+					})
+				});
+			});
+		});
 	}
 
 	buttonPack['theater-toptool__button'].onclick = ()=>{
@@ -476,9 +498,17 @@ window.onload = ()=>{
 				createVirtualWindow(option);
 			});
 			} break;
-			case 'vw-mousedown':{
-			const {point,windowNumber,type} = data.value;
-			mouseeventHandler(type,point,windowNumber);
+			case 'vw-mouseevent': {
+				const {mouseEventList,windowNumber} = data.value;
+				mouseEventList.forEach(({x,y,type})=>{
+					mouseeventHandler(type,x,y,windowNumber);
+				});
+			// const {point,windowNumber,type} = data.value;
+			// mouseeventHandler(type,point,windowNumber);
+			} break;
+			case 'vw-point': {
+				const {pointEventList,streamId} = data.value;
+				bridge.send(streamId,'vw-point',pointEventList);
 			} break;
 		}
 	}
@@ -488,7 +518,7 @@ window.onload = ()=>{
 		const stream = room.getStream(from);
 		bridge.addStream(from,stream);
 	}
-	bridge.on('vw-mouseevent',(e,{point,type})=>{
+	bridge.on('vw-mouseevent',(e,{mouseEventList})=>{
 		const values = e.from.split('.');
 		const target = values[0];
 		const windowNumber = values[2];
@@ -497,10 +527,35 @@ window.onload = ()=>{
 			option: {
 				target: target,
 				windowNumber: windowNumber,
-				point: point,
-				type: type
+				mouseEventList: mouseEventList,
+				userId: USERID
 			}
 		});
+	});
+	bridge.on('vw-point',(e,{pointEventList})=>{
+		const values = e.from.split('.');
+		const target = values[0];
+		const windowNumber = values[2];
+		socket.send({
+			action: 'vw-point',
+			option: {
+				roomId: ROOMID,
+				target: target,
+				pointEventList: pointEventList,
+				streamId: e.from,
+				userId: USERID
+			}
+		});
+	});
+	bridge.on('as-publicscreen',(e,value)=>{
+		socket.send({
+			action: 'as-publicscreen',
+			option: {
+				roomId: ROOMID,
+				userId: USERID,
+				value: value
+			}
+		})
 	});
 
 	appman.watch();
@@ -631,7 +686,7 @@ const createVirtualWindow = (option)=>{
 		width: 500,
 		height: 500
 	});
-	virtualWindow.loadURL(`${location.protocol}://${location.host}/vw?streamId=${streamId}&type=${option.type}`);
+	virtualWindow.loadURL(`${location.protocol}//${location.host}/vw?streamId=${streamId}&type=${option.type}`);
 	virtualWindow.openDevTools();
 	virtualWindow.on('closed',()=>{
 		socket.send({
@@ -639,7 +694,9 @@ const createVirtualWindow = (option)=>{
 			option: {
 				streamId: streamId,
 				roomId: option.roomId,
-				userId: USERID
+				userId: USERID,
+				ownerId: option.userId,
+				windowNumber: option.windowNumber
 			}
 		});
 	});
@@ -744,18 +801,26 @@ const initGroups = (groupList)=>{
 }
 
 // mouseevent
-const mouseeventHandler = (type,point,windowNumber)=>{
+const mouseeventHandler = (type,x,y,windowNumber)=>{
 	switch(type){
 		case 'click':
-		click(point.x,point.y,windowNumber);
+		click(x,y,windowNumber);
 		break;
 
 		case 'dragged':
-		dragged(point.x,point.y,windowNumber);
+		dragged(x,y,windowNumber);
 		break;
 
 		case 'doubleclick':
-		doubleclick(point.x,point.y,windowNumber);
+		doubleclick(x,y,windowNumber);
+		break;
+
+		case 'mousedown':
+		mousedown(x,y,windowNumber);
+		break;
+
+		case 'mouseup':
+		mouseup(x,y,windowNumber);
 		break;
 	}
 }
@@ -783,6 +848,22 @@ const doubleclick = (xrate,yrate,windowNumber)=>{
 	const y = targetBounds.y+targetBounds.height*yrate;
 	mouseevent.doubleclick(x,y);	
 }
+const mousedown = (xrate,yrate,windowNumber)=>{
+	const targetBounds = appman.getWindows().filter((win)=>{
+		return win.number == parseInt(windowNumber);
+	})[0].bounds;
+	const x = targetBounds.x+targetBounds.width*xrate;
+	const y = targetBounds.y+targetBounds.height*yrate;
+	mouseevent.mousedown(x,y);	
+}
+const mouseup = (xrate,yrate,windowNumber)=>{
+	const targetBounds = appman.getWindows().filter((win)=>{
+		return win.number == parseInt(windowNumber);
+	})[0].bounds;
+	const x = targetBounds.x+targetBounds.width*xrate;
+	const y = targetBounds.y+targetBounds.height*yrate;
+	mouseevent.mouseup(x,y);	
+}
 
 // webrtc
 const initRoom = ()=>{
@@ -796,14 +877,17 @@ const initRoom = ()=>{
 				id: appData.userId,
 				rank: 'student',
 				stream: stream,
-				asscreen: false
+				asscreen: appData.option['as-publicscreen']
 			}));
 			if(componentPack['group-view'].currentGroupId=='all'){
 				componentPack['item-view'].setAllItem();
 			}
 		}
 	}
-	room.joinRoom()
+	room.onclosepeer = (peer)=>{
+		componentPack['item-view'].deleteItem(peer.appData.userId);
+	}
+	room.joinRoom({'as-publicscreen': initConfig['as-publicscreen']})
 	.then(()=>{
 		return createScreenStream();
 	}).then((stream)=>{

@@ -4410,7 +4410,7 @@ exports.default = RemoteUnifiedPlanSdp;
 "use strict";
 class EasySocket extends WebSocket {
 	constructor(url){
-		super(url || `${location.protocol=='https'?'wss':'ws'}://${location.host}`);
+		super(url || `${location.protocol=='https:'?'wss':'ws'}://${location.host}`);
 		
 		this.messageHandler = {}
 		this.addEventListener('message',(e)=>{
@@ -4602,11 +4602,15 @@ class Room extends mediasoupClient.Room {
 	}
 
 	onnewpeer(peer){}
+	onclosepeer(peer){}
 	onnewstream(stream,appData){}
 
 	_onnewpeer(peer){
 		peer.on('newconsumer',(consumer)=>{
 			this._onnewconsumer(consumer);
+		});
+		peer.on('close',()=>{
+			this.onclosepeer(peer);
 		});
 		peer.consumers.forEach((consumer)=>{
 			this._onnewconsumer(consumer);
@@ -14486,9 +14490,17 @@ window.onload = ()=>{
 				createVirtualWindow(option);
 			});
 			} break;
-			case 'vw-mousedown':{
-			const {point,windowNumber,type} = data.value;
-			mouseeventHandler(type,point,windowNumber);
+			case 'vw-mouseevent': {
+				const {mouseEventList,windowNumber} = data.value;
+				mouseEventList.forEach(({x,y,type})=>{
+					mouseeventHandler(type,x,y,windowNumber);
+				});
+			// const {point,windowNumber,type} = data.value;
+			// mouseeventHandler(type,point,windowNumber);
+			} break;
+			case 'vw-point': {
+				const {pointEventList,streamId} = data.value;
+				bridge.send(streamId,'vw-point',pointEventList);
 			} break;
 		}
 	}
@@ -14498,7 +14510,7 @@ window.onload = ()=>{
 		const stream = room.getStream(from);
 		bridge.addStream(from,stream);
 	}
-	bridge.on('vw-mouseevent',(e,{point,type})=>{
+	bridge.on('vw-mouseevent',(e,{mouseEventList})=>{
 		const values = e.from.split('.');
 		const target = values[0];
 		const windowNumber = values[2];
@@ -14507,8 +14519,23 @@ window.onload = ()=>{
 			option: {
 				target: target,
 				windowNumber: windowNumber,
-				point: point,
-				type: type
+				mouseEventList: mouseEventList,
+				userId: USERID
+			}
+		});
+	});
+	bridge.on('vw-point',(e,{pointEventList})=>{
+		const values = e.from.split('.');
+		const target = values[0];
+		const windowNumber = values[2];
+		socket.send({
+			action: 'vw-point',
+			option: {
+				roomId: ROOMID,
+				target: target,
+				pointEventList: pointEventList,
+				streamId: e.from,
+				userId: USERID
 			}
 		});
 	});
@@ -14634,14 +14661,27 @@ const createWindowStream = (windowNumber)=>{
 	});
 }
 const createVirtualWindow = (option)=>{
+	const streamId = `${option.userId}.${option.source}.${option.windowNumber}.${option.roomId}`;
 	const virtualWindow = new BrowserWindow({
 		center: true,
 		title: 'virtual window',
 		width: 500,
 		height: 500
 	});
-	virtualWindow.loadURL(`${location.protocol}://${location.host}/vw?streamId=${option.userId}.${option.source}.${option.windowNumber}.${option.roomId}&type=${option.type}`);
+	virtualWindow.loadURL(`${location.protocol}//${location.host}/vw?streamId=${streamId}&type=${option.type}`);
 	virtualWindow.openDevTools();
+	virtualWindow.on('closed',()=>{
+		socket.send({
+			action: 'vw-close',
+			option: {
+				streamId: streamId,
+				roomId: option.roomId,
+				userId: USERID,
+				ownerId: option.userId,
+				windowNumber: option.windowNumber
+			}
+		});
+	});
 }
 const createContextMenu = (e)=>{
 	const menu = document.getElementById('context-menu__item-content');
@@ -14743,18 +14783,26 @@ const initGroups = (groupList)=>{
 }
 
 // mouseevent
-const mouseeventHandler = (type,point,windowNumber)=>{
+const mouseeventHandler = (type,x,y,windowNumber)=>{
 	switch(type){
 		case 'click':
-		click(point.x,point.y,windowNumber);
+		click(x,y,windowNumber);
 		break;
 
 		case 'dragged':
-		dragged(point.x,point.y,windowNumber);
+		dragged(x,y,windowNumber);
 		break;
 
 		case 'doubleclick':
-		doubleclick(point.x,point.y,windowNumber);
+		doubleclick(x,y,windowNumber);
+		break;
+
+		case 'mousedown':
+		mousedown(x,y,windowNumber);
+		break;
+
+		case 'mouseup':
+		mouseup(x,y,windowNumber);
 		break;
 	}
 }
@@ -14782,6 +14830,22 @@ const doubleclick = (xrate,yrate,windowNumber)=>{
 	const y = targetBounds.y+targetBounds.height*yrate;
 	mouseevent.doubleclick(x,y);	
 }
+const mousedown = (xrate,yrate,windowNumber)=>{
+	const targetBounds = appman.getWindows().filter((win)=>{
+		return win.number == parseInt(windowNumber);
+	})[0].bounds;
+	const x = targetBounds.x+targetBounds.width*xrate;
+	const y = targetBounds.y+targetBounds.height*yrate;
+	mouseevent.mousedown(x,y);	
+}
+const mouseup = (xrate,yrate,windowNumber)=>{
+	const targetBounds = appman.getWindows().filter((win)=>{
+		return win.number == parseInt(windowNumber);
+	})[0].bounds;
+	const x = targetBounds.x+targetBounds.width*xrate;
+	const y = targetBounds.y+targetBounds.height*yrate;
+	mouseevent.mouseup(x,y);	
+}
 
 // webrtc
 const initRoom = ()=>{
@@ -14801,6 +14865,9 @@ const initRoom = ()=>{
 				componentPack['item-view'].setAllItem();
 			}
 		}
+	}
+	room.onclosepeer = (peer)=>{
+		componentPack['item-view'].deleteItem(peer.appData.userId);
 	}
 	room.joinRoom()
 	.then(()=>{

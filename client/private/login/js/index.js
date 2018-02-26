@@ -2,7 +2,6 @@
 const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
-const net = remote.net;
 
 
 /* modules */

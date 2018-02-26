@@ -11,26 +11,13 @@ const appman = window.appman;
 const Bridge = window.Bridge;
 const size = remote.screen.getPrimaryDisplay().size;
 const mouseevent = window.mouseevent;
-
-const buttonPack = {
-}
-
-const inputPack = {
-}
-
-const elementPack = {
-}
-
-var componentPack = {
-}
-
+const initConfig = window.initConfig;
 
 /* その他 */
 var socket = null;
 var bridge = null;
 var room = null;
 var windowList = null;
-var background = null;
 var forwardcover = null;
 var ROOMID = decodeURIComponent(location.search.match(/roomid=(.*?)(&|$)/)[1]);
 var ROOMNAME = decodeURIComponent(location.search.match(/roomname=(.*?)(&|$)/)[1]);
@@ -48,9 +35,47 @@ window.onload = ()=>{
 	bridge.setLabel('parent');
 	bridge.onaddpeer = (from)=>{
 		const stream = room.getStream(from);
-		console.log(stream);
 		bridge.addStream(from,stream);
 	}
+	bridge.on('vw-mouseevent',(e,{mouseEventList})=>{
+		const values = e.from.split('.');
+		const target = values[0];
+		const windowNumber = values[2];
+		socket.send({
+			action: 'vw-mouseevent',
+			option: {
+				target: target,
+				windowNumber: windowNumber,
+				mouseEventList: mouseEventList,
+				userId: USERID
+			}
+		});
+	});
+	bridge.on('vw-point',(e,{pointEventList})=>{
+		const values = e.from.split('.');
+		const target = values[0];
+		const windowNumber = values[2];
+		socket.send({
+			action: 'vw-point',
+			option: {
+				roomId: ROOMID,
+				target: target,
+				pointEventList: pointEventList,
+				streamId: e.from,
+				userId: USERID
+			}
+		});
+	});
+	bridge.on('as-publicscreen',(e,value)=>{
+		socket.send({
+			action: 'as-publicscreen',
+			option: {
+				roomId: ROOMID,
+				userId: USERID,
+				value: value
+			}
+		})
+	});
 
 	/* init element */
 	for(const id in elementPack){
@@ -86,22 +111,34 @@ window.onload = ()=>{
 	socket.onmessage = (e)=>{
 		const data = JSON.parse(e.data);
 		switch(data.action){
-			case 'add-vw':
-			data.value.options.forEach((option)=>{
-				option.type = 'theater';
-				createVirtualWindow(option);
-			});
-			break;
-			case 'share-app':
-			data.value.options.forEach((option)=>{
-				option.type = 'share';
-				createVirtualWindow(option);
-			});
-			break;
-			case 'vw-mousedown':{
-			const {point,windowNumber,type} = data.value;
-			mouseeventHandler(type,point,windowNumber);
+			case 'add-vw': {
+				data.value.options.forEach((option)=>{
+					option.type = 'theater';
+					createVirtualWindow(option);
+				}); 
 			} break;
+			case 'share-app':{
+				data.value.windowNumberList.forEach((windowNumber)=>{
+					const option = {
+						source: data.value.source,
+						userId: data.value.userId,
+						roomId: data.value.roomId,
+						windowNumber: windowNumber,
+						type: 'share'
+					}
+					createVirtualWindow(option);
+				});
+			} break;
+			case 'vw-mouseevent': {
+				const {mouseEventList,windowNumber} = data.value;
+				mouseEventList.forEach(({x,y,type})=>{
+					mouseeventHandler(type,x,y,windowNumber);
+				});
+			} break;
+			case 'vw-point': {
+				const {pointEventList,streamId} = data.value;
+				bridge.send(streamId,'vw-point',pointEventList);
+			}
 		}
 	}
 
@@ -110,34 +147,33 @@ window.onload = ()=>{
 		windowList = _windowList.filter(isValid);
 	});
 	windowList = appman.getWindows().filter(isValid);
-
-	background = createBackground();
 }
 
 /* 便利関数 */
 
 // create
-const createBackground = ()=>{
-	const _background = new BrowserWindow({
-		width: size.width,
-		height: size.height,
-		type: 'desktop',
-		frame: false,
-		show: true
-	});
-	_background.loadURL(`${localdocument.background}?color=${COLOR}`);
-	_background.openDevTools();
-	return _background;
-}
 const createVirtualWindow = (option)=>{
+	const streamId = `${option.userId}.${option.source}.${option.windowNumber}.${option.roomId}`;
 	const virtualWindow = new BrowserWindow({
 		center: true,
 		title: 'virtual window',
 		width: 500,
 		height: 500
 	});
-	virtualWindow.loadURL(`https://${location.hostname}:${location.port}/vw?streamId=${option.userId}.${option.source}.${option.windowNumber}.${option.roomId}&type=${option.type}`);
+	virtualWindow.loadURL(`${location.protocol}//${location.host}/vw?streamId=${streamId}&type=${option.type}`);
 	virtualWindow.openDevTools();
+	virtualWindow.on('closed',()=>{
+		socket.send({
+			action: 'vw-close',
+			option: {
+				streamId: streamId,
+				roomId: option.roomId,
+				userId: USERID,
+				ownerId: option.userId,
+				windowNumber: option.windowNumber
+			}
+		});
+	});
 }
 const createScreenStream = ()=>{
 	return new Promise((resolve,reject)=>{
@@ -208,18 +244,26 @@ const isValid = (win)=>{
 }
 
 // mouseevent
-const mouseeventHandler = (type,point,windowNumber)=>{
+const mouseeventHandler = (type,x,y,windowNumber)=>{
 	switch(type){
 		case 'click':
-		click(point.x,point.y,windowNumber);
+		click(x,y,windowNumber);
 		break;
 
 		case 'dragged':
-		dragged(point.x,point.y,windowNumber);
+		dragged(x,y,windowNumber);
 		break;
 
 		case 'doubleclick':
-		doubleclick(point.x,point.y,windowNumber);
+		doubleclick(x,y,windowNumber);
+		break;
+
+		case 'mousedown':
+		mousedown(x,y,windowNumber);
+		break;
+
+		case 'mouseup':
+		mouseup(x,y,windowNumber);
 		break;
 	}
 }
@@ -247,6 +291,22 @@ const doubleclick = (xrate,yrate,windowNumber)=>{
 	const y = targetBounds.y+targetBounds.height*yrate;
 	mouseevent.doubleclick(x,y);	
 }
+const mousedown = (xrate,yrate,windowNumber)=>{
+	const targetBounds = appman.getWindows().filter((win)=>{
+		return win.number == parseInt(windowNumber);
+	})[0].bounds;
+	const x = targetBounds.x+targetBounds.width*xrate;
+	const y = targetBounds.y+targetBounds.height*yrate;
+	mouseevent.mousedown(x,y);	
+}
+const mouseup = (xrate,yrate,windowNumber)=>{
+	const targetBounds = appman.getWindows().filter((win)=>{
+		return win.number == parseInt(windowNumber);
+	})[0].bounds;
+	const x = targetBounds.x+targetBounds.width*xrate;
+	const y = targetBounds.y+targetBounds.height*yrate;
+	mouseevent.mouseup(x,y);	
+}
 
 // webrtc
 const initRoom = ()=>{
@@ -255,7 +315,7 @@ const initRoom = ()=>{
 	}
 	room.onnewstream = (stream,appData)=>{
 	}
-	room.joinRoom()
+	room.joinRoom({'as-publicscreen': initConfig['as-publicscreen']})
 	.then(()=>{
 		return createScreenStream();
 	}).then((stream)=>{
@@ -277,3 +337,45 @@ const initRoom = ()=>{
 		}));
 	});
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
