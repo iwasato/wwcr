@@ -411,7 +411,7 @@ CGKeyCode keyCodeFormKeyString(NSString *keyString)
     if ([keyString isEqualToString:@"4"]) return 21;
     if ([keyString isEqualToString:@"6"]) return 22;
     if ([keyString isEqualToString:@"5"]) return 23;
-    if ([keyString isEqualToString:@"="]) return 24;
+    // if ([keyString isEqualToString:@"="]) return 24;
     if ([keyString isEqualToString:@"9"]) return 25;
     if ([keyString isEqualToString:@"7"]) return 26;
     if ([keyString isEqualToString:@"-"]) return 27;
@@ -456,7 +456,7 @@ CGKeyCode keyCodeFormKeyString(NSString *keyString)
     if ([keyString isEqualToString:@"/"]) return 75;
     if ([keyString isEqualToString:@"ENTER"]) return 76;  // numberpad on full kbd
 
-    if ([keyString isEqualToString:@"="]) return 78;
+    // if ([keyString isEqualToString:@"="]) return 78;
 
     if ([keyString isEqualToString:@"="]) return 81;
     if ([keyString isEqualToString:@"0"]) return 82;
@@ -511,6 +511,8 @@ CGKeyCode keyCodeFormKeyString(NSString *keyString)
 int main(int argc, const char *argv[]){
 	// NSLog(@"%d",keyCodeFormKeyString([NSString stringWithCString: argv[1] encoding: NSUTF8StringEncoding]));
 	CGEventRef keyup, keydown;
+	// keydown = CGEventCreateKeyboardEvent(NULL,(CGKeyCode)[[NSString stringWithCString: argv[1] encoding: NSUTF8StringEncoding] intValue], true);
+	// keyup = CGEventCreateKeyboardEvent(NULL,(CGKeyCode)[[NSString stringWithCString: argv[1] encoding: NSUTF8StringEncoding] intValue], false);
 	keydown = CGEventCreateKeyboardEvent(NULL,keyCodeFormKeyString([NSString stringWithCString: argv[1] encoding: NSUTF8StringEncoding]), true);
 	keyup = CGEventCreateKeyboardEvent(NULL,keyCodeFormKeyString([NSString stringWithCString: argv[1] encoding: NSUTF8StringEncoding]), false);
 
