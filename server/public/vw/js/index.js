@@ -129,6 +129,32 @@ window.onload = ()=>{
 		}
 	});
 	document.body.addEventListener('keyup',(e)=>{
+		var key = e.key;
+		switch(key){
+			case 'Backspace': 
+			key = 'BACKSPACE';
+			break;
+			case 'Enter':
+			key = 'ENTER';
+			break;
+			case 'ArrowLeft':
+			key = 'LEFT';
+			break;
+			case 'ArrowRight':
+			key = 'RIGHT';
+			break;
+			case 'ArrowUp':
+			key = 'UP';
+			break;
+			case 'ArrowDown':
+			key = 'DOWN';
+			break;
+			case 'Shift': case 'Control': case 'Meta':
+			return;
+			break;
+			default:
+			break;
+		}
 		mouseEventList.push({
 			type: 'keyinput',
 			key: e.key
