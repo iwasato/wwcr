@@ -104,6 +104,8 @@ export default class ItemView extends React.Component {
 		this.setState(this.state);
 		this.onchange(e);
 	}
+	_onvideoref(video,srcObject){
+	}
 	/* */
 
 	/* override */

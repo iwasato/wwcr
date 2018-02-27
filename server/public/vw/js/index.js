@@ -132,7 +132,7 @@ window.onload = ()=>{
 		var key = e.key;
 		switch(key){
 			case 'Backspace': 
-			key = 'BACKSPACE';
+			key = 'DELETE';
 			break;
 			case 'Enter':
 			key = 'ENTER';
@@ -157,7 +157,7 @@ window.onload = ()=>{
 		}
 		mouseEventList.push({
 			type: 'keyinput',
-			key: e.key
+			key: key
 		});
 	});
 	video.addEventListener('mousedown',(e)=>{

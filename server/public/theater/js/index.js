@@ -14278,7 +14278,6 @@ const isValid = (win)=>{
 
 // mouseevent
 const keyeventHandler = (key)=>{
-	console.log(key);
 	keyevent.input(key);
 }
 const mouseeventHandler = (type,x,y,windowNumber)=>{
@@ -14287,7 +14286,7 @@ const mouseeventHandler = (type,x,y,windowNumber)=>{
 		click(x,y,windowNumber);
 		break;
 
-		case 'dragged':
+		case 'mousemove':
 		dragged(x,y,windowNumber);
 		break;
 
