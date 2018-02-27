@@ -53,6 +53,14 @@ body {
 	border: thin solid gray;
 }
 
+body.is-theater .tool-header {
+	display: none;
+}
+
+body.is-theater #main-video {
+	height: calc(100% - 2px);
+}
+
 #point {
 	position: absolute;
 	pointer-events: none;

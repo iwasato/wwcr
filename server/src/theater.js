@@ -34,7 +34,9 @@ window.onload = ()=>{
 	bridge = new Bridge(electron);
 	bridge.setLabel('parent');
 	bridge.onaddpeer = (from)=>{
-		const stream = room.getStream(from);
+		const valueList = from.split('.');
+		const streamId = valueList[0]+'.'+valueList[1]+'.'+valueList[2]+'.'+valueList[3];
+		const stream = room.getStream(streamId);
 		bridge.addStream(from,stream);
 	}
 	bridge.on('vw-mouseevent',(e,{mouseEventList})=>{
@@ -123,7 +125,16 @@ window.onload = ()=>{
 						windowNumber: windowNumber,
 						type: 'theater'
 					}
-					createVirtualWindow(option);
+					// createVirtualWindow(option);
+					const loop = ()=>{
+						if(count<MAXNUM+1){
+							createVirtualWindowDebug(option);
+							setTimeout(()=>{
+								loop();
+							},1000);
+						}
+					}
+					loop();
 				});
 			} break;
 			case 'vw-mouseevent': {
@@ -162,7 +173,6 @@ const createVirtualWindow = (option)=>{
 		height: 500
 	});
 	virtualWindow.loadURL(`${location.protocol}//${location.host}/vw?streamId=${streamId}&type=${option.type}`);
-	virtualWindow.openDevTools();
 	virtualWindow.on('closed',()=>{
 		socket.send({
 			action: 'vw-close',
@@ -382,5 +392,37 @@ const initRoom = ()=>{
 
 
 
-
-
+var _stream_ = null;
+var count = 0;
+const MARGIN = 40;
+const YNUM = 4;
+const XNUM = 4;
+const MAXNUM = XNUM*YNUM;
+const WIDTH = (size.width-MARGIN)/XNUM-MARGIN;
+const HEIGHT = (size.height-22-MARGIN)/YNUM-MARGIN;
+console.log(WIDTH,HEIGHT);
+const createVirtualWindowDebug = (option)=>{
+	const streamId = `${option.userId}.${option.source}.${option.windowNumber}.${option.roomId}.${count}`;
+	const virtualWindow = new BrowserWindow({
+		center: true,
+		title: 'virtual window',
+		width: WIDTH,
+		height: HEIGHT,
+		x: MARGIN+(count%XNUM)*(WIDTH+MARGIN),
+		y: 22+MARGIN+parseInt(count/XNUM)*(HEIGHT+MARGIN)
+	});
+	virtualWindow.loadURL(`${location.protocol}//${location.host}/vw?streamId=${streamId}&type=${option.type}`);
+	virtualWindow.on('closed',()=>{
+		socket.send({
+			action: 'vw-close',
+			option: {
+				streamId: streamId,
+				roomId: option.roomId,
+				userId: USERID,
+				ownerId: option.userId,
+				windowNumber: option.windowNumber
+			}
+		});
+	});
+	count++;
+}

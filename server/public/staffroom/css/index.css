@@ -114,6 +114,11 @@ header.mdl-layout__header > div:nth-of-type(1) .mdl-layout-title {
 	font-size: 15px;
 }
 
+.classroom-title > span {
+	display: block;
+	margin: 0 auto;
+}
+
 /* ツールバー */
 .focus-item-view > header.mdl-layout__header:after {
 	position: absolute;

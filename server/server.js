@@ -264,7 +264,6 @@ const onmessage = (socket,{action,option})=>{
 				console.log('theater app:'.bgYellow+` ${windowNumber}`.magenta+`(${option.userId} -> ${option.target})`);
 				console.log('	room: '.green+`${option.roomId}`.magenta+'\n');
 				const streamId = `${option.userId}.${option.source}.${windowNumber}.${option.roomId}`;
-				vws[option.roomId][streamId].push(option.target);
 			});
 			send(clients[option.target],'theater',null,option);
 		} break;

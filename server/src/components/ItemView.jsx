@@ -105,6 +105,15 @@ export default class ItemView extends React.Component {
 		this.onchange(e);
 	}
 	_onvideoref(video,srcObject){
+		if(!video || video.srcObject){
+			return;
+		}
+		video.addEventListener('canplay',(e)=>{
+			video.play();
+		},{
+			once: true
+		});
+		video.srcObject = srcObject;
 	}
 	/* */
 
@@ -189,7 +198,7 @@ export default class ItemView extends React.Component {
 							<img src={item.iconurl} className={this.state.downercontent || item.downercontent ? "invisible" : "icon"}></img><span style={this.state.downercontent || item.downercontent ? style.label.long : style.label.short}>{item.label}</span>
 						</div>
 						<div className="downercontent" style={this.state.downercontent || item.downercontent ? style.downercontent : style.invisible}>
-							<video ref={video=>{if(video && !video.srcObject){video.srcObject=item.srcObject;}}} className="video"></video>
+							<video ref={video=>{this._onvideoref(video,item.srcObject)}} className="video"></video>
 						</div>
 					</label>
 				</div>)

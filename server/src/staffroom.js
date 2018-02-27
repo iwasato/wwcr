@@ -468,7 +468,7 @@ window.onload = ()=>{
 						option: {
 							target: screen,
 							source: 'window',
-							userId: USERID,
+							userId: tmpFocusItemId,
 							roomId: ROOMID,
 							windowNumberList: windowNumberList
 						}
@@ -769,7 +769,6 @@ const createVirtualWindow = (option)=>{
 		height: 500
 	});
 	virtualWindow.loadURL(`${location.protocol}//${location.host}/vw?streamId=${streamId}&type=${option.type}`);
-	virtualWindow.openDevTools();
 	virtualWindow.on('closed',()=>{
 		socket.send({
 			action: 'vw-close',
