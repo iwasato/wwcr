@@ -580,7 +580,7 @@ window.onload = ()=>{
 				const {mouseEventList,windowNumber} = data.value;
 				mouseEventList.forEach((value)=>{
 					if(value.type=='keyinput'){
-						keyeventHandler(value.keyCode);
+						keyeventHandler(value.key);
 					} else {
 						mouseeventHandler(value.type,value.x,value.y,windowNumber);
 					}
@@ -884,8 +884,9 @@ const initGroups = (groupList)=>{
 }
 
 // mouseevent
-const keyeventHandler = (keyCode)=>{
-	keyevent.input(keyCode);
+const keyeventHandler = (key)=>{
+	console.log(key);
+	keyevent.input(key);
 }
 const mouseeventHandler = (type,x,y,windowNumber)=>{
 	switch(type){
