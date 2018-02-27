@@ -86,7 +86,7 @@ const createWindow = (url)=>{
 	});
 
 	// debug
-	// window.webContents.openDevTools();
+	window.webContents.openDevTools();
 }
 const makeURL = (_url,query)=>{
 	var url = `${_url}?`;
