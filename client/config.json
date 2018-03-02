@@ -3,7 +3,7 @@
 		"classroom-id": "",
 		"value": false
 	},
-	"server-address": "http://localhost:3001",
-	"as-publicscreen": false,
+	"server-address": "https://str-tennis.local:3000",
+	"as-publicscreen": true,
 	"edit-background": null
 }

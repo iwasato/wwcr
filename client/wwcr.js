@@ -8,12 +8,16 @@ const path = require('path');
 const url = require('url');
 const fs = require('fs');
 
+/* デモ用 */
+const theaterURL1 = 'https://str-tennis.local:3000/theater?rank=student&roomid=demo&roomname=テスト５&userid=moroz&username=両角 貴弘';
+const theaterURL2 = 'https://str-tennis.local:3000/theater?rank=student&roomid=demo&roomname=テスト５&userid=ashun&username=伊藤 栄俊';
+const staffroomURL = 'https://str-tennis.local:3000/staffroom?rank=teacher&roomid=demo&roomname=テスト５&userid=iwasato&username=岩田 知';
+
 /* local */
 const Bridge = require('./modules/bridge');
 
 /* third party */
 const electron = require('electron');
-const request = require('request');
 require('colors');
 
 /* electron module */
@@ -94,7 +98,6 @@ const makeURL = (_url,query)=>{
 		url += `${key}=${query[key]}&`
 	}
 	url = decodeURIComponent(url.substring(0,url.length-1));
-
 	return url;
 }
 const get = (_url,query)=>{
@@ -107,10 +110,12 @@ const get = (_url,query)=>{
 				data += chunk;
 			});
 			res.on('end',()=>{
+				console.log(data);
 				resolve(JSON.parse(data));
 			});
 		});
 		request.on('error',(error)=>{
+			console.log(error);
 			resolve({
 				result: false,
 				message: 'CONNECTINGEXCEPTION'
@@ -118,20 +123,6 @@ const get = (_url,query)=>{
 		});
 		request.end();
 	});
-}
-
-/* debug */
-const iwasato = {
-	id: 'iwasato',
-	password: 'Pad:8931',
-	rank: 'teacher',
-	name: '岩田 知'
-}
-const moroz = {
-	id: 'moroz',
-	password: 'Pad:8931',
-	rank: 'student',
-	name: '両角貴弘'
 }
 
 
@@ -177,6 +168,7 @@ app.on('ready',()=>{
 	bridge.on('login',(e,value)=>{
 		value.process = 'login';
 		get(config['server-address'],value)
+		// demoGet(config['server-address'],value)
 		.then(value=>{
 			if(value.result){
 				window.setOpacity(1.0);
@@ -188,6 +180,7 @@ app.on('ready',()=>{
 		var value = value;
 		value.process='getclassrooms';
 		get(config['server-address'],value)
+		// demoGet(config['server-address'],value)
 		.then(value=>{
 			if(value.result){
 				bridge.send('classrooms','classrooms',value.classrooms);
@@ -198,6 +191,7 @@ app.on('ready',()=>{
 		var value = value;
 		value.process='createclassroom';
 		get(config['server-address'],value)
+		// demoGet(config['server-address'],value)
 		.then(value=>{
 			if(value.result){
 				bridge.send('classrooms','add-classroom',value.classroom);
@@ -230,7 +224,24 @@ app.on('ready',()=>{
 	// ウィンドウ生成
 	settingWindow(localdocument.setting);
 	createBackground(localdocument.background);
-	createWindow(makeURL(localdocument.login));
+	switch(process.argv[2]){
+		case 'theater1':
+		createWindow(theaterURL1);
+		window.setOpacity(0);
+		window.setIgnoreMouseEvents(true);
+		break;
+		case 'theater2':
+		createWindow(theaterURL2);
+		window.setOpacity(0);
+		window.setIgnoreMouseEvents(true);
+		break;
+		case 'staffroom':
+		createWindow(staffroomURL);
+		break;
+		default:
+		createWindow(makeURL(localdocument.login));
+		break;
+	}
 	// createWindow(makeURL(`file://${__dirname}/private/classrooms/index.html`,moroz));
 
 
