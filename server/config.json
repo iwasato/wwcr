@@ -1,7 +1,8 @@
 {
 	"tls": {
 		"str-tennis": "str-tennis.iwasato.tk",
-		"tp-iwasato-mugi.ics.nitech.ac.jp": "mugi.iwasato.tk"
+		"tp-iwasato-mugi.ics.nitech.ac.jp": "mugi.iwasato.tk",
+		"str-tennis.local": "str-tennis.local"
 	},
 	"port": {
 		"https": 3000,

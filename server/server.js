@@ -27,7 +27,7 @@ const document = {
 const config = require(path.join(__dirname,'config.json'));
 
 /* hostname */
-const hostname = os.hostname();
+var hostname = os.hostname();
 
 /* tls file path */
 const keyfile = path.join(__dirname,'tls',config.tls[hostname],'privkey.pem')
@@ -40,12 +40,13 @@ router.get('/',(req,res)=>{
 		case 'login':
 		login(req.query.id,req.query.password)
 		.then(account=>{
+			console.log(account);
 			res.json({
 				result: true,
 				account: account
 			});
 		}).catch(err=>{
-			console.error(err);
+			console.error(req.query);
 			res.json({
 				result: false
 			});

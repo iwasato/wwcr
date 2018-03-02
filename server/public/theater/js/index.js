@@ -14159,11 +14159,11 @@ window.onload = ()=>{
 					}
 					// createVirtualWindow(option);
 					const loop = ()=>{
-						if(count<MAXNUM+1){
+						if(count<MAXNUM){
 							createVirtualWindowDebug(option);
 							setTimeout(()=>{
 								loop();
-							},1000);
+							},3000);
 						}
 					}
 					loop();
@@ -14428,10 +14428,10 @@ var _stream_ = null;
 var count = 0;
 const MARGIN = 40;
 const YNUM = 4;
-const XNUM = 4;
+const XNUM = 5;
 const MAXNUM = XNUM*YNUM;
-const WIDTH = (size.width-MARGIN)/XNUM-MARGIN;
-const HEIGHT = (size.height-22-MARGIN)/YNUM-MARGIN;
+const WIDTH = parseInt((size.width-MARGIN)/XNUM)-MARGIN;
+const HEIGHT = parseInt((size.height-22-MARGIN)/YNUM)-MARGIN;
 console.log(WIDTH,HEIGHT);
 const createVirtualWindowDebug = (option)=>{
 	const streamId = `${option.userId}.${option.source}.${option.windowNumber}.${option.roomId}.${count}`;
