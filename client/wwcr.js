@@ -23,8 +23,24 @@ require('colors');
 /* electron module */
 const {app,BrowserWindow,Tray,Menu,MenuItem,net} = electron;
 
+/* config */
+var config = null;
+try {
+	config = require('./config.json');
+} catch(e) {
+	config = {
+		'auto-enter-classroom': {
+			'classroom-id': '',
+			'value': false
+		},
+		'server-address': '',
+		'as-publicscreen': false,
+		'edit-background': null
+	}
+	fs.writeFileSync(`${__dirname}/config.json`,JSON.stringify(config,null,'\t'));
+}
+
 /* その他 */
-var config = require('./config.json');
 var window = null;
 var setting = null;
 var background = null;
@@ -110,12 +126,10 @@ const get = (_url,query)=>{
 				data += chunk;
 			});
 			res.on('end',()=>{
-				console.log(data);
 				resolve(JSON.parse(data));
 			});
 		});
 		request.on('error',(error)=>{
-			console.log(error);
 			resolve({
 				result: false,
 				message: 'CONNECTINGEXCEPTION'

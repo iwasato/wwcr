@@ -14168,24 +14168,24 @@ window.onload = ()=>{
 				number: number,
 				stream: room.getStream(streamId)
 			});
-			__WEBPACK_IMPORTED_MODULE_1__popup_index_js__["a" /* default */].windowList(streamList)
-			.then(valueList=>{
-				const windowNumberList = valueList.map(value=>{
-					return value.number;
-				});
-				const targetUserList = componentPack['item-view'].currentItemIdList;
-				targetUserList.forEach(target=>{
-					socket.send({
-						action: 'share-app',
-						option: {
-							target: target,
-							source: 'window',
-							userId: USERID,
-							roomId: ROOMID,
-							windowNumberList: windowNumberList
-						}
-					})
-				});
+		});
+		__WEBPACK_IMPORTED_MODULE_1__popup_index_js__["a" /* default */].windowList(streamList)
+		.then(valueList=>{
+			const windowNumberList = valueList.map(value=>{
+				return value.number;
+			});
+			const targetUserList = componentPack['item-view'].currentItemIdList;
+			targetUserList.forEach(target=>{
+				socket.send({
+					action: 'share-app',
+					option: {
+						target: target,
+						source: 'window',
+						userId: USERID,
+						roomId: ROOMID,
+						windowNumberList: windowNumberList
+					}
+				})
 			});
 		});
 	}
@@ -14223,22 +14223,22 @@ window.onload = ()=>{
 					number: number,
 					stream: room.getStream(streamId)
 				});
-				__WEBPACK_IMPORTED_MODULE_1__popup_index_js__["a" /* default */].windowList(streamList)
-				.then(winList=>{
-					const windowNumberList = winList.map(win=>{
-						return win.number;
-					});
-					socket.send({
-						action: 'theater',
-						option: {
-							target: screen,
-							source: 'window',
-							userId: USERID,
-							roomId: ROOMID,
-							windowNumberList: windowNumberList
-						}
-					})
+			});
+			__WEBPACK_IMPORTED_MODULE_1__popup_index_js__["a" /* default */].windowList(streamList)
+			.then(winList=>{
+				const windowNumberList = winList.map(win=>{
+					return win.number;
 				});
+				socket.send({
+					action: 'theater',
+					option: {
+						target: screen,
+						source: 'window',
+						userId: USERID,
+						roomId: ROOMID,
+						windowNumberList: windowNumberList
+					}
+				})
 			});
 		});
 	}
@@ -14417,24 +14417,24 @@ window.onload = ()=>{
 				number: number,
 				stream: room.getStream(streamId)
 			});
-			__WEBPACK_IMPORTED_MODULE_1__popup_index_js__["a" /* default */].windowList(streamList)
-			.then(valueList=>{
-				const windowNumberList = valueList.map(value=>{
-					return value.number;
-				});
-				const targetUserList = componentPack['item-view'].currentItemIdList;
-				targetUserList.forEach(target=>{
-					socket.send({
-						action: 'share-app',
-						option: {
-							target: target,
-							source: 'window',
-							userId: tmpFocusItemId,
-							roomId: ROOMID,
-							windowNumberList: windowNumberList
-						}
-					})
-				});
+		});
+		__WEBPACK_IMPORTED_MODULE_1__popup_index_js__["a" /* default */].windowList(streamList)
+		.then(valueList=>{
+			const windowNumberList = valueList.map(value=>{
+				return value.number;
+			});
+			const targetUserList = componentPack['item-view'].currentItemIdList;
+			targetUserList.forEach(target=>{
+				socket.send({
+					action: 'share-app',
+					option: {
+						target: target,
+						source: 'window',
+						userId: tmpFocusItemId,
+						roomId: ROOMID,
+						windowNumberList: windowNumberList
+					}
+				})
 			});
 		});
 	}
@@ -14472,22 +14472,22 @@ window.onload = ()=>{
 					number: number,
 					stream: room.getStream(streamId)
 				});
-				__WEBPACK_IMPORTED_MODULE_1__popup_index_js__["a" /* default */].windowList(streamList)
-				.then(winList=>{
-					const windowNumberList = winList.map(win=>{
-						return win.number;
-					});
-					socket.send({
-						action: 'theater',
-						option: {
-							target: screen,
-							source: 'window',
-							userId: tmpFocusItemId,
-							roomId: ROOMID,
-							windowNumberList: windowNumberList
-						}
-					})
+			});
+			__WEBPACK_IMPORTED_MODULE_1__popup_index_js__["a" /* default */].windowList(streamList)
+			.then(winList=>{
+				const windowNumberList = winList.map(win=>{
+					return win.number;
 				});
+				socket.send({
+					action: 'theater',
+					option: {
+						target: screen,
+						source: 'window',
+						userId: tmpFocusItemId,
+						roomId: ROOMID,
+						windowNumberList: windowNumberList
+					}
+				})
 			});
 		});
 	}
@@ -14971,7 +14971,6 @@ const initRoom = ()=>{
 	}
 	room.onnewstream = (stream,appData)=>{
 		if(appData.source == 'screen'){
-			console.log(appData);
 			componentPack['item-view'].addItem(userToItem({
 				name: appData.userName,
 				id: appData.userId,
@@ -15509,14 +15508,6 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAOECAMAAACG
 
 						const checkboxes = [];
 
-						const setListItem = (options)=>{
-							options.forEach(option=>{
-								const item = createWindowItem(option);
-								checkboxes.push(item.getElementsByClassName('window-outer__input')[0]);
-								windowListFrame.appendChild(item);
-							});
-						}
-
 						const createWindowItem = (option)=>{
 							const div = document.createElement('div');
 							div.className = 'window-outer';
@@ -15540,6 +15531,14 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABLAAAAOECAMAAACG
 							div.appendChild(input);
 							div.appendChild(label);
 							return div;
+						}
+
+						const setListItem = (options)=>{
+							options.forEach(option=>{
+								const item = createWindowItem(option);
+								checkboxes.push(item.getElementsByClassName('window-outer__input')[0]);
+								windowListFrame.appendChild(item);
+							});
 						}
 
 						setListItem(windowList);

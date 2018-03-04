@@ -40,7 +40,6 @@ router.get('/',(req,res)=>{
 		case 'login':
 		login(req.query.id,req.query.password)
 		.then(account=>{
-			console.log(account);
 			res.json({
 				result: true,
 				account: account
@@ -293,6 +292,9 @@ const onmessage = (socket,{action,option})=>{
 			console.log('close vw:'.bgYellow+` ${option.windowNumber}`.magenta+`(${option.ownerId} -> ${option.userId})`);
 			console.log('	room: '.green+`${option.roomId}`.magenta+'\n');
 			const streamId = option.streamId;
+			if(!vws[option.roomId] || !vws[option.roomId][streamId]){
+				return;
+			}
 			const index = vws[option.roomId][streamId].indexOf(option.userId);
 			if(index!=-1){
 				vws[option.roomId][streamId].splice(index,1);

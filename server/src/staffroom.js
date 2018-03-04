@@ -154,24 +154,24 @@ window.onload = ()=>{
 				number: number,
 				stream: room.getStream(streamId)
 			});
-			popup.windowList(streamList)
-			.then(valueList=>{
-				const windowNumberList = valueList.map(value=>{
-					return value.number;
-				});
-				const targetUserList = componentPack['item-view'].currentItemIdList;
-				targetUserList.forEach(target=>{
-					socket.send({
-						action: 'share-app',
-						option: {
-							target: target,
-							source: 'window',
-							userId: USERID,
-							roomId: ROOMID,
-							windowNumberList: windowNumberList
-						}
-					})
-				});
+		});
+		popup.windowList(streamList)
+		.then(valueList=>{
+			const windowNumberList = valueList.map(value=>{
+				return value.number;
+			});
+			const targetUserList = componentPack['item-view'].currentItemIdList;
+			targetUserList.forEach(target=>{
+				socket.send({
+					action: 'share-app',
+					option: {
+						target: target,
+						source: 'window',
+						userId: USERID,
+						roomId: ROOMID,
+						windowNumberList: windowNumberList
+					}
+				})
 			});
 		});
 	}
@@ -209,22 +209,22 @@ window.onload = ()=>{
 					number: number,
 					stream: room.getStream(streamId)
 				});
-				popup.windowList(streamList)
-				.then(winList=>{
-					const windowNumberList = winList.map(win=>{
-						return win.number;
-					});
-					socket.send({
-						action: 'theater',
-						option: {
-							target: screen,
-							source: 'window',
-							userId: USERID,
-							roomId: ROOMID,
-							windowNumberList: windowNumberList
-						}
-					})
+			});
+			popup.windowList(streamList)
+			.then(winList=>{
+				const windowNumberList = winList.map(win=>{
+					return win.number;
 				});
+				socket.send({
+					action: 'theater',
+					option: {
+						target: screen,
+						source: 'window',
+						userId: USERID,
+						roomId: ROOMID,
+						windowNumberList: windowNumberList
+					}
+				})
 			});
 		});
 	}
@@ -403,24 +403,24 @@ window.onload = ()=>{
 				number: number,
 				stream: room.getStream(streamId)
 			});
-			popup.windowList(streamList)
-			.then(valueList=>{
-				const windowNumberList = valueList.map(value=>{
-					return value.number;
-				});
-				const targetUserList = componentPack['item-view'].currentItemIdList;
-				targetUserList.forEach(target=>{
-					socket.send({
-						action: 'share-app',
-						option: {
-							target: target,
-							source: 'window',
-							userId: tmpFocusItemId,
-							roomId: ROOMID,
-							windowNumberList: windowNumberList
-						}
-					})
-				});
+		});
+		popup.windowList(streamList)
+		.then(valueList=>{
+			const windowNumberList = valueList.map(value=>{
+				return value.number;
+			});
+			const targetUserList = componentPack['item-view'].currentItemIdList;
+			targetUserList.forEach(target=>{
+				socket.send({
+					action: 'share-app',
+					option: {
+						target: target,
+						source: 'window',
+						userId: tmpFocusItemId,
+						roomId: ROOMID,
+						windowNumberList: windowNumberList
+					}
+				})
 			});
 		});
 	}
@@ -458,22 +458,22 @@ window.onload = ()=>{
 					number: number,
 					stream: room.getStream(streamId)
 				});
-				popup.windowList(streamList)
-				.then(winList=>{
-					const windowNumberList = winList.map(win=>{
-						return win.number;
-					});
-					socket.send({
-						action: 'theater',
-						option: {
-							target: screen,
-							source: 'window',
-							userId: tmpFocusItemId,
-							roomId: ROOMID,
-							windowNumberList: windowNumberList
-						}
-					})
+			});
+			popup.windowList(streamList)
+			.then(winList=>{
+				const windowNumberList = winList.map(win=>{
+					return win.number;
 				});
+				socket.send({
+					action: 'theater',
+					option: {
+						target: screen,
+						source: 'window',
+						userId: tmpFocusItemId,
+						roomId: ROOMID,
+						windowNumberList: windowNumberList
+					}
+				})
 			});
 		});
 	}
@@ -957,7 +957,6 @@ const initRoom = ()=>{
 	}
 	room.onnewstream = (stream,appData)=>{
 		if(appData.source == 'screen'){
-			console.log(appData);
 			componentPack['item-view'].addItem(userToItem({
 				name: appData.userName,
 				id: appData.userId,

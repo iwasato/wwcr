@@ -379,14 +379,6 @@ export default (()=>{
 
 						const checkboxes = [];
 
-						const setListItem = (options)=>{
-							options.forEach(option=>{
-								const item = createWindowItem(option);
-								checkboxes.push(item.getElementsByClassName('window-outer__input')[0]);
-								windowListFrame.appendChild(item);
-							});
-						}
-
 						const createWindowItem = (option)=>{
 							const div = document.createElement('div');
 							div.className = 'window-outer';
@@ -410,6 +402,14 @@ export default (()=>{
 							div.appendChild(input);
 							div.appendChild(label);
 							return div;
+						}
+
+						const setListItem = (options)=>{
+							options.forEach(option=>{
+								const item = createWindowItem(option);
+								checkboxes.push(item.getElementsByClassName('window-outer__input')[0]);
+								windowListFrame.appendChild(item);
+							});
 						}
 
 						setListItem(windowList);
