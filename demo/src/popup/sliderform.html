@@ -1,0 +1,45 @@
+<div>
+	<h4 class="title">ページを入力</h4>
+	<hr>
+	<div class="slider-form">
+		<span class="min-label">1</span>
+		<input id="swal2-content-pageslider__input" class="mdl-slider mdl-js-slider" type="range" min="1" max="25" value="1" step="1">
+		<span class="max-label">25</span>
+	</div>
+	<div class="mdl-textfield mdl-js-textfield">
+		<input class="mdl-textfield__input" type="text" pattern="[+-]?\d+" id="swal2-content-pagenumber__input">
+		<label class="mdl-textfield__label" for="swal2-content-pagenumber__input">Number...</label>
+		<span class="mdl-textfield__error">invalid value!</span>
+	</div>
+	<hr>
+	<div class="footer">
+		<button class="cancel-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+			キャンセル
+		</button>
+		<button class="ok-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+			決定
+		</button>
+	</div>
+</div>
+<style type="text/css">
+
+	#swal2-content .footer > * {
+		height: 30px;
+		line-height: 30px;
+		margin: 0 20px;
+	}
+
+	#swal2-content-pageslider__input {
+		width: 300px;
+	}
+
+	.slider-form {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.mdl-textfield.mdl-js-textfield > * {
+		text-align: center;
+	}
+</style>

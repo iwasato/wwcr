@@ -1,0 +1,108 @@
+{
+	"root": {
+		"list": [
+			{
+				"label": "wwc",
+				"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/wwc.png",
+				"next": {
+					"list": [
+						{
+							"label": "発表者モードにする",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/getspeaker.png"
+						},{
+							"label": "聴講者モードにする",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/getlistener.png"
+						},{
+							"label": "自由モードにする",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/getfree.png"
+						},{
+							"label": "資料を開く",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/document.png"
+						},{
+							"label": "ページを指定する",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/gotopage.png",
+							"value": "wwc-go-to-page"
+						},{
+							"label": "自動再生",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/autoplay.png"
+						},{
+							"label": "戻るメッセージ",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/callback.png"
+						}
+					],
+					"subtitle": "操作を選択"
+				}
+			},{
+				"label": "safari",
+				"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/safari.png",
+				"next": {
+					"list": [
+						{
+							"label": "Python - Wikipedia",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/bookmark.png"
+						},{
+							"label": "情報処理学会",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/bookmark.png"
+						},{
+							"label": "Moodle - 国立大学法人名古屋工業大学　情報基盤センター",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/bookmark.png"
+						},{
+							"label": "ブックマークを追加",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/add.png",
+							"value": "addbookmark"
+						}
+					],
+					"subtitle": "ブックマークを選択"
+				}
+			},{
+				"label": "Microsoft Office",
+				"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/msoffice.png",
+				"next": {
+					"list": [
+						{
+							"label": "Power Point",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/powerpoint.png"
+						},{
+							"label": "Excel",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/excel.png"
+						},{
+							"label": "Word",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/word.png"
+						}
+					],
+					"subtitle": "オフィスアプリを選択"
+				}
+			},{
+				"label": "デスクトップファイル",
+				"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/desktop.png"
+			},{
+				"label": "ファイル配布",
+				"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/filedist.png",
+				"value": "filedist"
+			},{
+				"label": "ファイル回収",
+				"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/filecollect.png",
+				"value": "filecollect"
+			},{
+				"label": "アンケート",
+				"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/questionnaire.png",
+				"next": {
+					"list": [
+						{
+							"label": "Googleフォームで作成",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/googleform.png",
+							"value": "https://docs.google.com/forms/u/0/?tgif=d"
+						},
+						{
+							"label": "開始する",
+							"iconurl": "/Users/iwasato/Documents/workspace/tmp/WWBServer/public/_navigator_/appicon/questionnairestart.png",
+							"value": "startquestionnaire"
+						}
+					],
+					"subtitle": "操作の選択"
+				}
+			}
+		],
+		"subtitle": "アプリを選択"
+	}
+}

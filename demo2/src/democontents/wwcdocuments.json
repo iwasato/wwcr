@@ -1,0 +1,512 @@
+{
+	"status": true,
+	"message": "",
+	"result": {
+		"ts": null,
+		"te": null,
+		"meetings": [
+			{
+				"name": "議題1",
+				"docs": [
+					{
+						"open": true,
+						"num": 1,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/e478ed497a1b7da28c72eed765ca66b7",
+						"name": "会社概要.pdf",
+						"doc_id": 76,
+						"pos": 1,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/c96a6ae43d7053a5a60320cfae80df57.jpg"
+					},
+					{
+						"open": true,
+						"num": 2,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/bcf2ffff372947011b7355151e9886cf",
+						"name": "Wisdom Web Conference 利用の手引き.pdf",
+						"doc_id": 77,
+						"pos": 2,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/8860571e4c766570307cf8e8090fb21c.jpg"
+					},
+					{
+						"open": false,
+						"num": 3,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/dfcf6b82332652602b1c0ab9c295d23d",
+						"name": "資料同期.mp4",
+						"doc_id": 78,
+						"pos": 3,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/6f545b17757c9bf67874065fa1eeea1f.jpg"
+					},
+					{
+						"doc_id": 79,
+						"pos": 4
+					},
+					{
+						"open": true,
+						"num": 4,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/805be802afa8e195726cb4067a8d0d28",
+						"name": "agenda.txt",
+						"doc_id": 80,
+						"pos": 5,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/276cb54b5033e32c8f984b67eb374a32.jpg"
+					},
+					{
+						"open": true,
+						"num": 5,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/e41860eb844c81a649c29585beca4cbf",
+						"name": "Wisdom Web Attendant 操作マニュアル.pdf",
+						"doc_id": 81,
+						"pos": 6,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/020a285d84ccb5c2cd1d7d877c49d72b.jpg"
+					},
+					{
+						"open": true,
+						"num": 6,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/bed7f74c9e58919adf30cfee5a90036d",
+						"name": "Wisdom Web Attendant.pdf",
+						"doc_id": 82,
+						"pos": 7,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/eebf25c1050c347faf759ccac3f7b062.jpg"
+					},
+					{
+						"open": true,
+						"num": 7,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/3aefcf0e37e3d1bce06bf2beec626237",
+						"name": "Wisdom Web Attendant.pptx",
+						"doc_id": 83,
+						"pos": 8,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/17125ccf85681a104f11f0e57e6b2a84.jpg"
+					},
+					{
+						"doc_id": 84,
+						"pos": 9
+					},
+					{
+						"doc_id": 85,
+						"pos": 10
+					},
+					{
+						"open": true,
+						"num": 8,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/f8764e3026edb3f3fab1ceae228da937",
+						"name": "red.web",
+						"doc_id": 86,
+						"pos": 11,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/29f0dd0c929ab1eb8712cbb8bde2c04b.jpg"
+					},
+					{
+						"open": true,
+						"num": 9,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/77c12ab1b5107bc32e8ac3ef3c43932c",
+						"name": "blue.web",
+						"doc_id": 87,
+						"pos": 12,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/fa24becf22f553b34b9a508c60c360d3.jpg"
+					},
+					{
+						"open": true,
+						"num": 10,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/a6d972de20bc83407fcb35175931cc76",
+						"name": "green.web",
+						"doc_id": 88,
+						"pos": 13,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/03936489351a6ca897e1a6576c8b68e5.jpg"
+					},
+					{
+						"open": true,
+						"num": 11,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/00e56f05a8f38f3fc48781631cab4790",
+						"name": "yellow.web",
+						"doc_id": 89,
+						"pos": 14,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/57cb5b339a05a9e707c31969a45e45ef.jpg"
+					},
+					{
+						"open": true,
+						"num": 12,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/1657e8643fa1d73e69f21a4556b2c93d",
+						"name": "ようこそ.web",
+						"doc_id": 90,
+						"pos": 15,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/b29ade43b0a2f6fb53dc08975d20d78d.jpg"
+					}
+				],
+				"meeting_id": 6
+			},
+			{
+				"name": "議題2",
+				"docs": [
+					{
+						"open": true,
+						"num": 13,
+						"url": "http://demo.wisdomweb.jp/wwc/dist/26c4ca0ea5bb53677f32515318caee21",
+						"name": "トマム.JPG",
+						"doc_id": 91,
+						"pos": 1,
+						"thumburl": "http://demo.wisdomweb.jp/wwc/thumb/a76abe76ea32895b8f065a72e62d0b64.jpg"
+					},
+					{
+						"doc_id": 92,
+						"pos": 2
+					},
+					{
+						"doc_id": 93,
+						"pos": 3
+					},
+					{
+						"doc_id": 94,
+						"pos": 4
+					},
+					{
+						"doc_id": 95,
+						"pos": 5
+					},
+					{
+						"doc_id": 96,
+						"pos": 6
+					},
+					{
+						"doc_id": 97,
+						"pos": 7
+					},
+					{
+						"doc_id": 98,
+						"pos": 8
+					},
+					{
+						"doc_id": 99,
+						"pos": 9
+					},
+					{
+						"doc_id": 100,
+						"pos": 10
+					},
+					{
+						"doc_id": 101,
+						"pos": 11
+					},
+					{
+						"doc_id": 102,
+						"pos": 12
+					},
+					{
+						"doc_id": 103,
+						"pos": 13
+					},
+					{
+						"doc_id": 104,
+						"pos": 14
+					},
+					{
+						"doc_id": 105,
+						"pos": 15
+					}
+				],
+				"meeting_id": 7
+			},
+			{
+				"name": "議題3",
+				"docs": [
+					{
+						"doc_id": 106,
+						"pos": 1
+					},
+					{
+						"doc_id": 107,
+						"pos": 2
+					},
+					{
+						"doc_id": 108,
+						"pos": 3
+					},
+					{
+						"doc_id": 109,
+						"pos": 4
+					},
+					{
+						"doc_id": 110,
+						"pos": 5
+					},
+					{
+						"doc_id": 111,
+						"pos": 6
+					},
+					{
+						"doc_id": 112,
+						"pos": 7
+					},
+					{
+						"doc_id": 113,
+						"pos": 8
+					},
+					{
+						"doc_id": 114,
+						"pos": 9
+					},
+					{
+						"doc_id": 115,
+						"pos": 10
+					},
+					{
+						"doc_id": 116,
+						"pos": 11
+					},
+					{
+						"doc_id": 117,
+						"pos": 12
+					},
+					{
+						"doc_id": 118,
+						"pos": 13
+					},
+					{
+						"doc_id": 119,
+						"pos": 14
+					},
+					{
+						"doc_id": 120,
+						"pos": 15
+					}
+				],
+				"meeting_id": 8
+			},
+			{
+				"name": "議題4",
+				"docs": [
+					{
+						"doc_id": 121,
+						"pos": 1
+					},
+					{
+						"doc_id": 122,
+						"pos": 2
+					},
+					{
+						"doc_id": 123,
+						"pos": 3
+					},
+					{
+						"doc_id": 124,
+						"pos": 4
+					},
+					{
+						"doc_id": 125,
+						"pos": 5
+					},
+					{
+						"doc_id": 126,
+						"pos": 6
+					},
+					{
+						"doc_id": 127,
+						"pos": 7
+					},
+					{
+						"doc_id": 128,
+						"pos": 8
+					},
+					{
+						"doc_id": 129,
+						"pos": 9
+					},
+					{
+						"doc_id": 130,
+						"pos": 10
+					},
+					{
+						"doc_id": 131,
+						"pos": 11
+					},
+					{
+						"doc_id": 132,
+						"pos": 12
+					},
+					{
+						"doc_id": 133,
+						"pos": 13
+					},
+					{
+						"doc_id": 134,
+						"pos": 14
+					},
+					{
+						"doc_id": 135,
+						"pos": 15
+					}
+				],
+				"meeting_id": 9
+			},
+			{
+				"name": "議題5",
+				"docs": [
+					{
+						"doc_id": 136,
+						"pos": 1
+					},
+					{
+						"doc_id": 137,
+						"pos": 2
+					},
+					{
+						"doc_id": 138,
+						"pos": 3
+					},
+					{
+						"doc_id": 139,
+						"pos": 4
+					},
+					{
+						"doc_id": 140,
+						"pos": 5
+					},
+					{
+						"doc_id": 141,
+						"pos": 6
+					},
+					{
+						"doc_id": 142,
+						"pos": 7
+					},
+					{
+						"doc_id": 143,
+						"pos": 8
+					},
+					{
+						"doc_id": 144,
+						"pos": 9
+					},
+					{
+						"doc_id": 145,
+						"pos": 10
+					},
+					{
+						"doc_id": 146,
+						"pos": 11
+					},
+					{
+						"doc_id": 147,
+						"pos": 12
+					},
+					{
+						"doc_id": 148,
+						"pos": 13
+					},
+					{
+						"doc_id": 149,
+						"pos": 14
+					},
+					{
+						"doc_id": 150,
+						"pos": 15
+					}
+				],
+				"meeting_id": 10
+			}
+		],
+		"name": "Wisdom Web",
+		"token2": "demoedit",
+		"token_id": 2,
+		"room_id": 1,
+		"token": "demo"
+	},
+	"settings": [
+		[
+			"099999",
+			"false",
+			"false"
+		],
+		[
+			"100008",
+			"true",
+			"false"
+		],
+		[
+			"100007",
+			"false",
+			"false"
+		],
+		[
+			"100001",
+			"true",
+			"false"
+		],
+		[
+			"100002",
+			"true",
+			"false"
+		],
+		[
+			"100003",
+			"false",
+			"false"
+		],
+		[
+			"100004",
+			"false",
+			"false"
+		],
+		[
+			"100005",
+			"60",
+			"false"
+		],
+		[
+			"100006",
+			"3",
+			"false"
+		],
+		[
+			"100000",
+			"false",
+			"false"
+		],
+		[
+			"000001",
+			"true",
+			"false"
+		],
+		[
+			"000002",
+			"true",
+			"false"
+		],
+		[
+			"000003",
+			"false",
+			"false"
+		],
+		[
+			"000004",
+			"true",
+			"false"
+		],
+		[
+			"001001",
+			"false",
+			"false"
+		],
+		[
+			"001002",
+			"false",
+			"false"
+		],
+		[
+			"001003",
+			"false",
+			"false"
+		],
+		[
+			"002001",
+			"false",
+			"false"
+		],
+		[
+			"003001",
+			"false",
+			"false"
+		],
+		[
+			"004001",
+			"true",
+			"false"
+		]
+	]
+}

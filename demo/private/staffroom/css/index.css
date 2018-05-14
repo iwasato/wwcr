@@ -1,0 +1,235 @@
+/* 全体ページのレイアウト */
+body {
+	background-color: white;
+}
+main.mdl-layout__content {
+	height: 100%;
+	display: grid;
+	grid-template-columns: 220px 1fr;
+	grid-template-rows: 100%;
+	overflow: hidden;
+}
+main.mdl-layout__content #add-group-box {
+	height: 120px;
+	padding: 10px;
+	transition: all 300ms 0s ease;
+	border: thin solid lightgray;
+	overflow: hidden;
+}
+main.mdl-layout__content .edit-group-button-box {
+	display: flex;
+	height: 40px;
+	overflow: hidden;
+	align-items: center;
+	transition: all 300ms 0s ease;
+}
+main.mdl-layout__content .edit-group-button-box > * {
+	width: 100%;
+	height: 35px;
+	line-height: 35px;
+}
+main.mdl-layout__content #add-group-box:not(.visible) {
+	height: 0;
+	padding: 0 10px;
+	border: none;
+}
+main.mdl-layout__content #add-group-box + .edit-group-button-box + #group-view{
+	height: calc(60% - 40px);
+}
+main.mdl-layout__content #add-group-box.visible + .edit-group-button-box + #group-view{
+	height: calc(60% - 142px);
+}
+main.mdl-layout__content #add-group-box.visible + .edit-group-button-box {
+	height: 0;
+}
+main.mdl-layout__content #add-group-box .add-group-footer {
+	width: 198px;
+	display: flex;
+	align-items: center;
+}
+main.mdl-layout__content #add-group-box .add-group-footer > * {
+	height: 30px;
+	line-height: 30px;
+}
+main.mdl-layout__content .add-group-footer > button:nth-of-type(1) {
+	margin-left: 10px;
+	margin-right: 50px;
+}
+main.mdl-layout__content aside {
+	grid-row: 1 / 1;
+	grid-column: 1 / 1;
+	border-right: thin solid lightgray;
+}
+main.mdl-layout__content #item-view {
+	grid-row: 1 / 1;
+	grid-column: 2 / 2;
+}
+
+/* コンテキストメニュー > アイテム */
+#context-menu__item {
+	position: absolute;
+}
+#context-menu__item-content {
+	width: 340px;
+	height: 315px;
+	padding: 5px;
+}
+#context-menu__item-content .tool-box {
+	width: 100%;
+	height: 282px;
+}
+#context-menu__item-content .tool-button {
+	width: 105px;
+	margin: 4px;
+	float: left;
+}
+#context-menu__item-content .tool-box button {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+}
+#context-menu__item-content .tool-box button .material-icons {
+	width: 100%;
+	font-size: 48px;
+}
+#context-menu__item-content .context-menu__footer {
+	width: 100%;
+	height: 38px;
+}
+#context-menu__item-content .context-menu__footer button {
+	width: calc(100% - 10px);
+	height: calc(100% - 10px);
+	line-height: calc(100% - 10px);
+	margin: 0 5px 5px 5px;
+}
+
+/* タイトル */
+header.mdl-layout__header > div:nth-of-type(1) {
+	height: 25px;
+	-webkit-app-region: drag;
+}
+header.mdl-layout__header > div:nth-of-type(1) .mdl-layout-title {
+	width: 100%;
+	text-align: center;
+	font-size: 15px;
+}
+
+.classroom-title > span {
+	display: block;
+	margin: 0 auto;
+}
+
+/* ツールバー */
+.focus-item-view > header.mdl-layout__header:after {
+	position: absolute;
+	content: "";
+	left: 0;
+	top: 25px;
+	right: 0;
+	width: 100%;
+	height: 100px;
+	background-color: rgba(0,0,0,0.5);
+}
+.focus-item-view > main.mdl-layout__content > #group-list:after {
+	position: absolute;
+	content: "";
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 220px;
+	background-color: rgba(0,0,0,0.5);
+}
+.tools__header {
+	height: 112px;
+	padding: 0 10px;
+}
+.tools__header > * {
+	height: calc(100% - 16px);
+}
+
+/* ツールバー > ボタンボックス */
+.tools__header .tool-box {
+	display: flex;
+	margin: 0 auto;
+	padding: 8px;
+}
+.tools__header .tool-box.back-button {
+	margin: 0;
+}
+.tools__header .tool-button {
+	width: 105px;
+	margin: 8px;
+}
+.tool-button > button {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+}
+.tool-button > button > .material-icons {
+	width: 100%;
+	font-size: 48px;
+}
+
+/* ツールバー > アイテムサイズスライダー */
+.screen-size-slider {
+	display: flex;
+	align-items: center;
+	padding-right: 20px;
+}
+.screen-size-slider > .material-icons:nth-of-type(1) {
+	font-size: 24px;
+}
+.screen-size-slider > .material-icons:nth-of-type(2) {
+	font-size: 36px;
+}
+.screen-size-slider > * {
+	display: inline-block;
+}
+.screen-size-slider input[type="range"] {
+	width: 200px;
+}
+.screen-size-slider input[type="range"]::-webkit-slider-thumb {
+	background-color: white;
+}
+.screen-size-slider input[type="range"]:active::-webkit-slider-thumb {
+	box-shadow: 0 0 0 4px rgba(255,255,255,.6);
+}
+.screen-size-slider .mdl-slider__background-lower {
+	background: #ccff90;
+}
+
+
+.swal2-container.swal2-shown {
+	margin-top: 25px;
+}
+
+
+#smart-group-view {
+	width: 100%;
+	height: 40%;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.smart-group-pack {}
+.smart-group-frame {
+	display: flex;
+	width: calc(100% - 20px);
+	height: 40px;
+	padding: 0 10px;
+	align-items: center;
+	cursor: pointer;
+}
+.smart-group-frame:hover {
+	background-color: rgba(0,0,0,0.2);
+}
+.smart-group-icon {
+	width: 36px;
+	height: 36px;
+	padding: 10px;
+	border-radius: 50%;
+}
+.smart-group-label {
+	width: 100%;
+	font-size: 16px;
+}

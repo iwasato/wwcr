@@ -125,16 +125,17 @@ window.onload = ()=>{
 						windowNumber: windowNumber,
 						type: 'theater'
 					}
-					createVirtualWindow(option);
-					// const loop = ()=>{
-					// 	if(count<MAXNUM){
-					// 		createVirtualWindowDebug(option);
-					// 		setTimeout(()=>{
-					// 			loop();
-					// 		},3000);
-					// 	}
-					// }
-					// loop();
+					// createVirtualWindow(option);
+
+					const loop = ()=>{
+						if(count<MAXNUM){
+							createVirtualWindowDebug(option);
+							setTimeout(()=>{
+								loop();
+							},3000);
+						}
+					}
+					loop();
 				});
 			} break;
 			case 'vw-mouseevent': {
@@ -400,6 +401,7 @@ const XNUM = 5;
 const MAXNUM = XNUM*YNUM;
 const WIDTH = parseInt((size.width-MARGIN)/XNUM)-MARGIN;
 const HEIGHT = parseInt((size.height-22-MARGIN)/YNUM)-MARGIN;
+const MEMORY = {};
 const createVirtualWindowDebug = (option)=>{
 	const streamId = `${option.userId}.${option.source}.${option.windowNumber}.${option.roomId}.${count}`;
 	const virtualWindow = new BrowserWindow({
@@ -423,5 +425,22 @@ const createVirtualWindowDebug = (option)=>{
 			}
 		});
 	});
+	if(count == 0){
+		measureMemoryUsage();
+	}
 	count++;
+}
+
+const measureMemoryUsage = ()=>{
+	const loop = ()=>{
+		if(count<MAXNUM){
+			setTimeout(()=>{
+				MEMORY[count] = process.memoryUsage();
+				loop();
+			},30);
+		} else {
+			bridge.sendToMain('debug-save' MEMORY);
+		}
+	}
+	loop();
 }

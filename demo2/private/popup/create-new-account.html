@@ -1,0 +1,123 @@
+<div class="setting-new-account-info-frame">
+	<h6 class="subtitle">名前</h6>
+	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label input-box">
+		<input class="mdl-textfield__input" type="text" id="new-account-name__input">
+		<label class="mdl-textfield__label" for="new-account-name__input">Your Name</label>
+	</div>
+	<hr>
+	<h6 class="subtitle">ID</h6>
+	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label input-box">
+		<input class="mdl-textfield__input" pattern="^([a-zA-Z0-9]{3,})$" type="text" id="new-account-id__input">
+		<label class="mdl-textfield__label" for="new-account-id__input">Account ID</label>
+		<span class="mdl-textfield__error fit-pattern">3文字以上の半角英数字+[" : "," @ "]で入力してください</span>
+		<span class="mdl-textfield__error alraedy-exists">すでに存在するアカウントです</span>
+	</div>
+	<h6 class="subtitle">パスワード</h6>
+	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label input-box">
+		<input class="mdl-textfield__input" pattern="^([a-zA-Z0-9:@]{6,})$" type="password" id="new-account-password__input">
+		<label class="mdl-textfield__label" for="new-account-password__input">Account Password</label>
+		<span class="mdl-textfield__error">6文字以上の半角英数字+[" : "," @ "]で入力してください</span>
+	</div>
+	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label input-box">
+		<input class="mdl-textfield__input" type="password" id="new-account-password-confirm__input">
+		<label class="mdl-textfield__label" for="new-account-password-confirm__input">Confirm</label>
+		<span class="mdl-textfield__error">パスワードと一致しません</span>
+	</div>
+	<hr>
+	<div class="end-buttons-box">
+		<button id="new-account-create__button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" disabled>
+			作成
+		</button>
+
+		<button id="cancel__button" class="mdl-button mdl-js-button mdl-button--raised">
+			キャンセル
+		</button>
+		<div class="input-box">
+			<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="new-account-as-teacher__input">
+				<input type="checkbox" id="new-account-as-teacher__input" class="mdl-checkbox__input">
+				<span class="mdl-checkbox__label">教師としてアカウントを作成する</span>
+			</label>
+		</div>
+	</div>
+</div>
+
+<style type="text/css">
+	#swal2-content {
+		text-align: left;
+	}
+
+	.swal2-modal .swal2-title {
+		margin: 0;
+	}
+
+	.setting-new-account-info-frame {
+		width: 100%;
+	}
+
+	.mdl-textfield__input:disabled {
+		color: lightgray;
+	}
+
+	.subtitle {
+		margin-top: 12px;
+		margin-left: 40px;
+		margin-bottom: 10px;
+	}
+
+	.input-box {
+		padding-top: 0;
+		padding-bottom: 0;
+		display: block;
+		margin: 0 auto;
+	}
+
+	.input-box.mdl-textfield.is-focused label.mdl-textfield__label {
+		top: -16px;
+	}
+
+	.input-box.mdl-textfield.is-dirty label.mdl-textfield__label {
+		top: -16px;
+	}
+
+	.input-box.mdl-textfield > label {
+		top: 4px;
+	}
+
+	.input-box.mdl-textfield > label:after {
+		bottom: 0;
+	}
+
+	.input-box:nth-of-type(2) {
+		margin-bottom: 24px;
+	}
+
+	.input-box:nth-of-type(4) {
+		margin-top: 36px;
+	}
+
+	.end-buttons-box {
+		display: flex;
+		width: 100%;
+		height: 35px;
+		align-items: center;
+		flex-direction: row-reverse;
+	}
+
+	.end-buttons-box > button {
+		height: 90%;
+		margin-right: 10px;
+		line-height: 90%;
+	}
+
+	.end-buttons-box .mdl-checkbox__label {
+		font-size: 12px;
+	}
+
+	#new-account-id__input:not(.fit-pattern) + label + .fit-pattern + .already-exists {
+		display: none;
+	}
+
+	#new-account-id__input.fit-pattern + label + .fit-pattern {
+		display: none;
+	}
+</style>

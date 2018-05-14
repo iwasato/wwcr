@@ -176,6 +176,9 @@ app.on('ready',()=>{
 		}
 		fs.writeFileSync(`${__dirname}/config.json`,JSON.stringify(config,null,'\t'));
 	});
+	bridge.on('debug-save',(e,memory)=>{
+		fs.writeFileSync(`${__dirname}/memory.json`,JSON.stringify(memory,null,'\t'));
+	});
 	bridge.on('change-background',(e,option)=>{
 		bridge.send('background','change',option);
 	});
