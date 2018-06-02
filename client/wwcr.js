@@ -48,6 +48,9 @@ const debugWindow = ()=>{
 
 	// debug
 	// w.webContents.openDevTools();
+
+	w.setOpacity(0);
+	w.setIgnoreMouseEvents(true);
 	debugWindows.push(w);
 }
 
