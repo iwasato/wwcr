@@ -336,13 +336,13 @@ const initRoom = ()=>{
 	room.onnewpeer = (peer)=>{
 	}
 	room.onnewstream = (stream,appData)=>{
-
-
-
-		console.log(appData);
-
-
-
+		const option = {
+			userId: appData.userId,
+			source: appData.source,
+			windowNumber: appData.windowNumber,
+			roomId: appData.roomId
+		}
+		createVirtualWindow(option);
 	}
 	room.joinRoom()
 	.then(()=>{

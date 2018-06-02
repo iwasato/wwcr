@@ -13,6 +13,15 @@ const theaterURL1 = 'https://str-tennis.local:3000/theater?rank=student&roomid=d
 const theaterURL2 = 'https://str-tennis.local:3000/theater?rank=student&roomid=demo&roomname=テスト５&userid=ashun&username=伊藤 栄俊';
 const staffroomURL = 'https://str-tennis.local:3000/staffroom?rank=teacher&roomid=demo&roomname=テスト５&userid=iwasato&username=岩田 知';
 const debugWindows = [];
+var id = null;
+const aiueo = ()=>{
+	id = setInterval(()=>{
+		debugWindow();
+		if(debugWindows.length==20){
+			clearInterval(id);
+		}
+	}, 20000);
+}
 const debugWindow = ()=>{
 	var w = null;
 	w = new BrowserWindow({
@@ -283,6 +292,9 @@ app.on('ready',()=>{
 		break;
 		case 'staffroom':
 		createWindow(staffroomURL);
+		break;
+		case 'ex':
+		debugWindow();
 		break;
 		default:
 		createWindow(makeURL(localdocument.login));

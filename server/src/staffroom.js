@@ -963,6 +963,18 @@ const mouseup = (xrate,yrate,windowNumber)=>{
 const initRoom = ()=>{
 	room = new Room(socket,ROOMID,null);
 	room.onnewpeer = (peer)=>{
+
+
+		// if(!debugStart){
+			setTimeout(()=>{
+				measureMemoryUsage();
+			},3000)
+			// console.log('debug start');
+			// debugStart = true;
+		// }
+
+
+
 	}
 	room.onnewstream = (stream,appData)=>{
 		if(appData.source == 'screen'){
@@ -1056,17 +1068,17 @@ const initRoom = ()=>{
 
 
 
-
-var count = -1;
+var debugStart = false;
+var count = 0;
 const YNUM = 4;
 const XNUM = 5;
 const MAXNUM = XNUM*YNUM;
 const MEMORY = {};
-const aiueo = ()=>{
-	setInterval(()=>{
-		count++;
-	}, 5000);
-}
+// const aiueo = ()=>{
+// 	setInterval(()=>{
+// 		count++;
+// 	}, 5000);
+// }
 
 const measureMemoryUsage = ()=>{
 	const loop = ()=>{
@@ -1076,10 +1088,15 @@ const measureMemoryUsage = ()=>{
 					MEMORY[count] = [];
 				}
 				MEMORY[count].push(eprocess.getProcessMemoryInfo());
+				if(MEMORY[count].length == 1000){
+					count++;
+					return;
+				}
 				loop();
-			},40);
-		} else {
+			},10);
+		} else if(count==MAXNUM) {
 			bridge.sendToMain('debug-save', MEMORY);
+			count++;
 		}
 	}
 	loop();
