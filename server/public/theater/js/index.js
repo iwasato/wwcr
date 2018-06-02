@@ -14368,7 +14368,7 @@ const initRoom = ()=>{
 	room.onnewpeer = (peer)=>{
 	}
 	room.onnewstream = (stream,appData)=>{
-		if(appData.source != 'window' || appData.windowNumber != 61) {
+		if(appData.source != 'window' || appData.windowNumber != 2914) {
 			return;
 		}
 		const option = {
@@ -14380,27 +14380,27 @@ const initRoom = ()=>{
 		createVirtualWindow(option);
 	}
 	room.joinRoom()
-	.then(()=>{
-		return createScreenStream();
-	}).then((stream)=>{
-		room.addStream(stream,{
-			source: 'screen',
-			userId: USERID,
-			userName: USERNAME,
-			roomId: room.id,
-			aspublicscreen: initConfig['as-publicscreen']
-		});
-		createAllWindowStream()
-		.then(values=>values.map(value=>{
-			room.addStream(value.stream,{
-				source: 'window',
-				userId: USERID,
-				userName: USERNAME,
-				windowNumber: value.number,
-				roomId: room.id
-			});
-		}));
-	});
+	// .then(()=>{
+	// 	return createScreenStream();
+	// }).then((stream)=>{
+	// 	room.addStream(stream,{
+	// 		source: 'screen',
+	// 		userId: USERID,
+	// 		userName: USERNAME,
+	// 		roomId: room.id,
+	// 		aspublicscreen: initConfig['as-publicscreen']
+	// 	});
+	// 	createAllWindowStream()
+	// 	.then(values=>values.map(value=>{
+	// 		room.addStream(value.stream,{
+	// 			source: 'window',
+	// 			userId: USERID,
+	// 			userName: USERNAME,
+	// 			windowNumber: value.number,
+	// 			roomId: room.id
+	// 		});
+	// 	}));
+	// });
 }
 
 
