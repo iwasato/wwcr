@@ -336,6 +336,9 @@ const initRoom = ()=>{
 	room.onnewpeer = (peer)=>{
 	}
 	room.onnewstream = (stream,appData)=>{
+		if(appData.source != 'window') {
+			return;
+		}
 		const option = {
 			userId: appData.userId,
 			source: appData.source,

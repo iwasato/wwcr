@@ -294,7 +294,8 @@ app.on('ready',()=>{
 		createWindow(staffroomURL);
 		break;
 		case 'ex':
-		debugWindow();
+		// debugWindow();
+		aiueo();
 		break;
 		default:
 		createWindow(makeURL(localdocument.login));
