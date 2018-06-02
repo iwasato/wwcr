@@ -9,6 +9,7 @@ const remote = window.remote;
 const BrowserWindow = window.BrowserWindow;
 const appman = window.appman;
 const Bridge = window.Bridge;
+const eprocess = window._eprocess
 const size = remote.screen.getPrimaryDisplay().size;
 const mouseevent = window.mouseevent;
 const initConfig = window.initConfig;
@@ -127,6 +128,9 @@ window.onload = ()=>{
 					}
 					// createVirtualWindow(option);
 
+
+
+
 					const loop = ()=>{
 						if(count<MAXNUM){
 							createVirtualWindowDebug(option);
@@ -136,6 +140,9 @@ window.onload = ()=>{
 						}
 					}
 					loop();
+
+
+
 				});
 			} break;
 			case 'vw-mouseevent': {
@@ -329,6 +336,13 @@ const initRoom = ()=>{
 	room.onnewpeer = (peer)=>{
 	}
 	room.onnewstream = (stream,appData)=>{
+
+
+
+		console.log(appData);
+
+
+
 	}
 	room.joinRoom()
 	.then(()=>{
@@ -394,7 +408,7 @@ const initRoom = ()=>{
 
 
 var _stream_ = null;
-var count = 0;
+var count = -1;
 const MARGIN = 40;
 const YNUM = 4;
 const XNUM = 5;
@@ -425,21 +439,24 @@ const createVirtualWindowDebug = (option)=>{
 			}
 		});
 	});
+	count++;
 	if(count == 0){
 		measureMemoryUsage();
 	}
-	count++;
 }
 
 const measureMemoryUsage = ()=>{
 	const loop = ()=>{
 		if(count<MAXNUM){
 			setTimeout(()=>{
-				MEMORY[count] = process.memoryUsage();
+				if(!MEMORY[count]){
+					MEMORY[count] = [];
+				}
+				MEMORY[count].push(eprocess.getProcessMemoryInfo());
 				loop();
-			},30);
+			},40);
 		} else {
-			bridge.sendToMain('debug-save' MEMORY);
+			bridge.sendToMain('debug-save', MEMORY);
 		}
 	}
 	loop();

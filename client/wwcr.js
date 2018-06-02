@@ -12,6 +12,35 @@ const fs = require('fs');
 const theaterURL1 = 'https://str-tennis.local:3000/theater?rank=student&roomid=demo&roomname=テスト５&userid=moroz&username=両角 貴弘';
 const theaterURL2 = 'https://str-tennis.local:3000/theater?rank=student&roomid=demo&roomname=テスト５&userid=ashun&username=伊藤 栄俊';
 const staffroomURL = 'https://str-tennis.local:3000/staffroom?rank=teacher&roomid=demo&roomname=テスト５&userid=iwasato&username=岩田 知';
+const debugWindows = [];
+const debugWindow = ()=>{
+	var w = null;
+	w = new BrowserWindow({
+		center: true,
+		width: 800,
+		height: 600,
+		minWidth: 800,
+		minHeight: 600,
+		maximizable: false,
+		useContentSize: true,
+		titleBarStyle: 'hidden',
+		show: false
+	});
+	w.on('closed',(e)=>{
+		stafroom = null;
+	});
+	const url = `https://str-tennis.local:3000/theater?rank=student&roomid=demo&roomname=テスト５&userid=moroz${debugWindows.length}&username=両角 貴弘${debugWindows.length}`;
+	w.loadURL(decodeURIComponent(url));
+	w.once('ready-to-show',(e)=>{
+		w.show();
+	},{
+		once: true
+	});
+
+	// debug
+	// w.webContents.openDevTools();
+	debugWindows.push(w);
+}
 
 /* local */
 const Bridge = require('./modules/bridge');

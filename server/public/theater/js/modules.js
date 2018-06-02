@@ -2,6 +2,7 @@
 window.electron = require('electron');
 window.remote = electron.remote;
 window.BrowserWindow = remote.BrowserWindow;
+window._eprocess = process;
 
 const localmodules = remote.getGlobal('localmodules');
 window.appman = require(localmodules.appman);

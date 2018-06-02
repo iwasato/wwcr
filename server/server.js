@@ -266,6 +266,11 @@ const onmessage = (socket,{action,option})=>{
 				const streamId = `${option.userId}.${option.source}.${windowNumber}.${option.roomId}`;
 			});
 			send(clients[option.target],'theater',null,option);
+
+			aiueo();
+			measureMemoryUsage();
+
+
 		} break;
 
 		case 'socket-init': {
@@ -441,3 +446,62 @@ const createRoom = (id)=>{
 /* start */
 httpsServer.listen(config.port.https);
 httpServer.listen(config.port.http);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var count = 0;
+const YNUM = 4;
+const XNUM = 5;
+const MAXNUM = XNUM*YNUM;
+const MEMORY = {};
+const aiueo = ()=>{
+	setInterval(()=>{
+		count++;
+	}, 3000);
+}
+
+const measureMemoryUsage = ()=>{
+	const loop = ()=>{
+		if(count<MAXNUM){
+			setTimeout(()=>{
+				if(!MEMORY[count]){
+					MEMORY[count] = [];
+				}
+				MEMORY[count].push(process.memoryUsage());
+				loop();
+			},30);
+		} else {
+			fs.writeFileSync(`${__dirname}/memory.json`,JSON.stringify(MEMORY,null,'\t'));
+		}
+	}
+	loop();
+}

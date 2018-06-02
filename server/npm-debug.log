@@ -22,7 +22,7 @@
 14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:220:5)
 15 verbose pkgid app@1.0.0
 16 verbose cwd /Users/iwasato/Documents/workspace/WWCR/server
-17 error Darwin 17.4.0
+17 error Darwin 17.5.0
 18 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
 19 error node v9.2.0
 20 error npm  v4.0.2

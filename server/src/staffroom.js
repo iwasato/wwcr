@@ -11,6 +11,7 @@ const remote = window.remote;
 const BrowserWindow = window.BrowserWindow;
 const appman = window.appman;
 const Bridge = window.Bridge;
+const eprocess = window._eprocess;
 const size = remote.screen.getPrimaryDisplay().size;
 const mouseevent = window.mouseevent;
 const keyevent = window.keyevent;
@@ -474,6 +475,14 @@ window.onload = ()=>{
 						windowNumberList: windowNumberList
 					}
 				})
+
+
+
+				aiueo();
+				measureMemoryUsage();
+
+
+				
 			});
 		});
 	}
@@ -1003,4 +1012,75 @@ const initRoom = ()=>{
 			});
 		}));
 	});
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var count = -1;
+const YNUM = 4;
+const XNUM = 5;
+const MAXNUM = XNUM*YNUM;
+const MEMORY = {};
+const aiueo = ()=>{
+	setInterval(()=>{
+		count++;
+	}, 5000);
+}
+
+const measureMemoryUsage = ()=>{
+	const loop = ()=>{
+		if(count<MAXNUM){
+			setTimeout(()=>{
+				if(!MEMORY[count]){
+					MEMORY[count] = [];
+				}
+				MEMORY[count].push(eprocess.getProcessMemoryInfo());
+				loop();
+			},40);
+		} else {
+			bridge.sendToMain('debug-save', MEMORY);
+		}
+	}
+	loop();
 }
