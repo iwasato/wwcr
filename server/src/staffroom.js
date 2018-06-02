@@ -1073,7 +1073,7 @@ var count = 0;
 const YNUM = 4;
 const XNUM = 5;
 // const MAXNUM = XNUM*YNUM;
-const MAXNUM = 10;
+const MAXNUM = 15
 const MEMORY = {};
 // const aiueo = ()=>{
 // 	setInterval(()=>{
@@ -1090,14 +1090,18 @@ const measureMemoryUsage = ()=>{
 				}
 				MEMORY[count].push(eprocess.getProcessMemoryInfo());
 				if(MEMORY[count].length == 1000){
+					console.log('=======================================');
+					console.log('done: '+count);
+					console.log('=======================================');
 					count++;
+					if(count==MAXNUM) {
+						bridge.sendToMain('debug-save', MEMORY);
+						count++;
+					}
 					return;
 				}
 				loop();
 			},10);
-		} else if(count==MAXNUM) {
-			bridge.sendToMain('debug-save', MEMORY);
-			count++;
 		}
 	}
 	loop();

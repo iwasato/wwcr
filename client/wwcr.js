@@ -17,7 +17,7 @@ var id = null;
 const aiueo = ()=>{
 	id = setInterval(()=>{
 		debugWindow();
-		if(debugWindows.length==10){
+		if(debugWindows.length==8){
 			clearInterval(id);
 		}
 	}, 20000);

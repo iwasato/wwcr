@@ -336,7 +336,7 @@ const initRoom = ()=>{
 	room.onnewpeer = (peer)=>{
 	}
 	room.onnewstream = (stream,appData)=>{
-		if(appData.source != 'window' || appData.windowNumber != 61) {
+		if(appData.source != 'window' || appData.windowNumber != 2914) {
 			return;
 		}
 		const option = {
