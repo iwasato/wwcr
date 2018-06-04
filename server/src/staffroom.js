@@ -1072,8 +1072,8 @@ var debugStart = false;
 var count = 0;
 const YNUM = 4;
 const XNUM = 5;
-const MAXNUM = XNUM*YNUM;
-// const MAXNUM = 15
+// const MAXNUM = XNUM*YNUM;
+const MAXNUM = 15
 const MEMORY = {};
 // const aiueo = ()=>{
 // 	setInterval(()=>{
