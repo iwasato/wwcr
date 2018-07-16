@@ -1,0 +1,6 @@
+{
+	"keyfile": "/Users/iwasato/Documents/cert/myhouse.windowshare.tk/privkey.pem",
+	"certfile": "/Users/iwasato/Documents/cert/myhouse.windowshare.tk/cert.pem",
+	"port": 3000,
+	"database": "./db/wwcr.sqlite3"
+}

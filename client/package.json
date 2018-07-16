@@ -2,20 +2,22 @@
   "name": "app",
   "version": "1.0.0",
   "description": "mados app",
-  "main": "wwcr.js",
+  "main": "index.js",
   "scripts": {
     "start": "npm test",
-    "test": "./node_modules/.bin/electron .",
-    "classrooms": "./node_modules/.bin/jsx -x jsx ./private/classrooms/js/src ./private/classrooms/js --watch"
+    "test": "./node_modules/.bin/electron index.js",
+    "webpack": "./node_modules/.bin/webpack --watch"
   },
-  "keywords": [
-    "electron"
-  ],
+  "keywords": [],
   "author": "iwasato",
   "license": "ISC",
   "dependencies": {
-    "colors": "^1.1.2",
-    "electron": "^1.7.10",
-    "react-tools": "^0.13.3"
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "electron": "^2.0.5",
+    "webpack": "^3.11.0",
+    "ws": "^4.0.0"
   }
 }

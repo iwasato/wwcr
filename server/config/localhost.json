@@ -1,0 +1,6 @@
+{
+	"keyfile": "/Users/iwasato/Documents/cert/localhost/privkey.pem",
+	"certfile": "/Users/iwasato/Documents/cert/localhost/cert.pem",
+	"port": 3000,
+	"database": "./db/wwcr.sqlite3"
+}

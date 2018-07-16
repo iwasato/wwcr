@@ -1,7 +1,7 @@
 module.exports = {
 	target: 'node',
 	entry: {
-		'.': './src/server/index.js'
+		'.': './src/client/index.js'
 	},
 	output: {
 		path: __dirname,

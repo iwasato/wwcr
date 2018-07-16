@@ -2,10 +2,10 @@
   "name": "app",
   "version": "1.0.0",
   "description": "mados app",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "start": "npm test",
-    "test": "node server.js",
+    "test": "node index.js",
     "webpack": "./node_modules/.bin/webpack --watch"
   },
   "keywords": [],
@@ -22,12 +22,11 @@
     "mediasoup-client": "^2.0.10",
     "url-loader": "^0.6.2",
     "webpack": "^3.11.0",
-    "colors": "^1.1.2",
     "express": "^4.16.2",
     "mediasoup": "^2.0.12",
-    "mediasoup-client": "^2.0.10",
     "sqlite3": "^3.1.13",
     "urlsafe-base64": "^1.0.0",
-    "ws": "^4.0.0"
+    "ws": "^4.0.0",
+    "seedrandom": "^2.4.3"
   }
 }
